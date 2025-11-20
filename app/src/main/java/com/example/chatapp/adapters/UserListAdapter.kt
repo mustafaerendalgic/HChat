@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.chatapp.R
 import com.example.chatapp.data.entity.UserListItem
 
-class UserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
+/*class UserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
 
     init {
         val profilePicture = item.findViewById<ImageView>(R.id.profilePhoto)
@@ -53,4 +53,4 @@ class DiffCallback() : ItemCallback<UserListItem>() {
         return oldItem.nick == oldItem.nick
     }
 
-}
+}*/

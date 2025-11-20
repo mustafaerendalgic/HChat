@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chatapp.data.repo.Repo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -15,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 @HiltViewModel
-class MainPageViewModel @Inject constructor(val repo: Repo) : ViewModel() {
+class MainPageViewModel @Inject constructor() : ViewModel() {
 
     private val _temp = MutableLiveData<String>()
     val temp: LiveData<String> = _temp
@@ -30,22 +29,6 @@ class MainPageViewModel @Inject constructor(val repo: Repo) : ViewModel() {
 
     val userListRef = FirebaseFirestore.getInstance().collection("users")
 
-    fun assignTemp(){
-        viewModelScope.launch {
-        try {
-            _temp.value = repo.getTheWeatherData(
-                latitude.value!!.toFloat(),
-                longitude.value!!.toFloat()
-            ).current.temperature_2m.toString()
-            Log.d("sicaklik", _temp.value.toString())
-
-        }
-            catch (e: Exception){
-                Log.d("sicaklik", e.toString())
-            }
-
-        }
-    }
 
     fun updateLatLong(latitude: Float, longitude: Float){
         _latitude.value = latitude

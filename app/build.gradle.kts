@@ -68,10 +68,6 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
 
-    implementation ("com.google.code.gson:gson:2.13.2")
-    implementation ("com.squareup.retrofit2:retrofit:3.0.0")
-    implementation ("com.squareup.retrofit2:converter-gson:3.0.0")
-
     implementation("com.google.dagger:hilt-android:2.56")
     ksp("com.google.dagger:hilt-android-compiler:2.56")
 

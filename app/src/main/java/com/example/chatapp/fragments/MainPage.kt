@@ -33,8 +33,6 @@ class MainPage : Fragment() {
 
         viewmodel.updateLatLong(latitude, longitude)
 
-        viewmodel.assignTemp()
-
         binding.userList
 
         return binding.root
