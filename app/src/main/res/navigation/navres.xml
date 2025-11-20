@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navres"
+    app:startDestination="@id/loginPage">
+
+    <fragment
+        android:id="@+id/mainPage"
+        android:name="com.example.chatapp.fragments.MainPage"
+        android:label="fragment_main_page"
+        tools:layout="@layout/fragment_main_page" >
+        <action
+            android:id="@+id/mainToChat"
+            app:destination="@id/chatPage" />
+        <action
+            android:id="@+id/mainToLogin"
+            app:destination="@id/loginPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginPage"
+        android:name="com.example.chatapp.fragments.LoginPage"
+        android:label="fragment_login_page"
+        tools:layout="@layout/fragment_login_page" >
+        <action
+            android:id="@+id/loginToMain"
+            app:destination="@id/mainPage"
+            app:popUpTo="@id/loginPage"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/loginToSign"
+            app:destination="@id/signUpPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatPage"
+        android:name="com.example.chatapp.fragments.ChatPage"
+        android:label="fragment_chat_page"
+        tools:layout="@layout/fragment_chat_page" >
+        <action
+            android:id="@+id/chatToMain"
+            app:destination="@id/mainPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpPage"
+        android:name="com.example.chatapp.fragments.SignUpPage"
+        android:label="fragment_sign_up_page"
+        tools:layout="@layout/fragment_sign_up_page" >
+        <action
+            android:id="@+id/signToLogin"
+            app:destination="@id/loginPage" />
+    </fragment>
+</navigation>
