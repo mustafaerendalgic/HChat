@@ -35,8 +35,6 @@ class MainPage : Fragment() {
 
         viewmodel.assignTemp()
 
-
-
         binding.userList
 
         return binding.root

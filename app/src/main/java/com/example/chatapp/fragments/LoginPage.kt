@@ -33,43 +33,6 @@ class LoginPage : Fragment() { // Fragment'ı bu şekilde tanımlayın
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.test.setOnClickListener {
-
-            val email = "patates@example.com"
-            val password = "123456"
-            val nickname = "patates"
-
-            val email2 = "patates2@example.com"
-            val password2 = "123456"
-            val nickname2 = "patates2"
-
-            if(nickname.contains(" ")){
-                Toast.makeText(requireContext(), ContextCompat.getString(requireContext(), R.string.nicknamesBlank),
-                    Toast.LENGTH_SHORT).show()
-            }
-            else {
-
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                    .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Başarılı", Toast.LENGTH_SHORT).show()
-                        FirebaseFirestore.getInstance().collection("users").document("userMap").set(mapOf(hasher(email.toString()) to nickname),
-                            SetOptions.merge())
-                        findNavController().popBackStack()
-                    }.addOnFailureListener {
-                        Toast.makeText(requireContext(), "Başarısız ${it}", Toast.LENGTH_SHORT).show()
-                    }
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email2, password2)
-                    .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Başarılı", Toast.LENGTH_SHORT).show()
-                        FirebaseFirestore.getInstance().collection("users").document("userMap").set(mapOf(hasher(email2.toString()) to nickname2),
-                            SetOptions.merge())
-                        findNavController().popBackStack()
-                    }.addOnFailureListener {
-                        Toast.makeText(requireContext(), "Başarısız ${it}", Toast.LENGTH_SHORT).show()
-                    }
-
-            }
-        }
 
         binding.girisYap.setOnClickListener {
             val eMail = binding.eMailTextField.text.toString().trim()

@@ -49,6 +49,18 @@ class SignUpPage : Fragment() {
 
         }
 
+        binding.test.setOnClickListener {
+            val email = "patates@example.com"
+            val password = "123456"
+            val nickname = "patates"
+
+            val email2 = "patates2@example.com"
+            val password2 = "123456"
+            val nickname2 = "patates2"
+            signUpPageViewModel.checkAndSignUserUp(email, password, nickname, requireContext())
+            signUpPageViewModel.checkAndSignUserUp(email2, password2, nickname2, requireContext())
+        }
+
         return binding.root
     }
 
