@@ -1,5 +1,7 @@
 package com.example.chatapp.adapters
 
+import android.media.Image
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -11,13 +13,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.chatapp.R
 import com.example.chatapp.data.entity.UserListItem
 
-/*class UserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
-
+class UserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
+    val profilePicture: ImageView
+    val nickname: TextView
+    val lastMessage: TextView
+    val messageStatus: ImageView
     init {
-        val profilePicture = item.findViewById<ImageView>(R.id.profilePhoto)
-        val nickname = item.findViewById<TextView>(R.id.nicknameTextField)
-        val lastMessage = item.findViewById<TextView>(R.id.lastMessage)
-        val messageStatus = item.findViewById<ImageView>(R.id.messageSeen)
+        profilePicture = item.findViewById<ImageView>(R.id.profilePhoto)
+        nickname = item.findViewById<TextView>(R.id.username)
+        lastMessage = item.findViewById<TextView>(R.id.lastMessage)
+        messageStatus = item.findViewById<ImageView>(R.id.messageSeen)
     }
 
 }
@@ -27,14 +32,19 @@ class UserListAdapter() : ListAdapter<UserListItem, UserListViewHolder>(DiffCall
         parent: ViewGroup,
         viewType: Int
     ): UserListViewHolder {
-        TODO("Not yet implemented")
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.main_mage_user_list_design, parent, false)
+        return UserListViewHolder(v)
     }
 
     override fun onBindViewHolder(
         holder: UserListViewHolder,
         position: Int
     ) {
-        TODO("Not yet implemented")
+
+        val item = getItem(position)
+
+        holder.nickname.text = item.nick
+
     }
 }
 
@@ -53,4 +63,4 @@ class DiffCallback() : ItemCallback<UserListItem>() {
         return oldItem.nick == oldItem.nick
     }
 
-}*/
+}

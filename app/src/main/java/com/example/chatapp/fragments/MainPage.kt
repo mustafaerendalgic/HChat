@@ -6,7 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.chatapp.R
+import com.example.chatapp.adapters.UserListAdapter
+import com.example.chatapp.data.entity.UserListItem
 import com.example.chatapp.databinding.FragmentMainPageBinding
 import com.example.chatapp.viewmodels.MainPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,6 +22,7 @@ class MainPage : Fragment() {
     val viewmodel: MainPageViewModel by activityViewModels()
 
     private lateinit var binding: FragmentMainPageBinding
+    private val mainPageViewModel: MainPageViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,12 +34,20 @@ class MainPage : Fragment() {
     ): View? {
         binding = FragmentMainPageBinding.inflate(inflater, container, false)
 
-        var latitude = 52.52f
-        var longitude = 13.41f
+        mainPageViewModel.fetchUserList()
 
-        viewmodel.updateLatLong(latitude, longitude)
+        val userListAdapter = UserListAdapter()
+        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        binding.userList
+        var userList = listOf<UserListItem>()
+
+        mainPageViewModel.userList.observe(viewLifecycleOwner) { data ->
+            userListAdapter.submitList(data)
+        }
+
+        userListAdapter.submitList(userList)
+        binding.userList.adapter = userListAdapter
+        binding.userList.layoutManager = layoutManager
 
         return binding.root
     }
