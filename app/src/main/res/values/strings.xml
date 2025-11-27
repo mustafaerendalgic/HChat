@@ -13,5 +13,7 @@
     <string name="nicknamesBlank">İsimler boşluk içeremez</string>
     <string name="nickNameIsUsed">Nickname zaten kullanımda</string>
     <string name="emailIsUsed">E-mail zaten kullanımda</string>
+    <string name="putProfilePicture">Lütfen bir profil fotoğrafı yükleyin</string>
+    <string name="isBlank">Lütfen tüm alanları doldurduğunuzdan emin olun</string>
 
 </resources>

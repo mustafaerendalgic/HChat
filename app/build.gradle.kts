@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -71,6 +72,10 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.56")
     ksp("com.google.dagger:hilt-android-compiler:2.56")
 
+    implementation("com.google.firebase:firebase-storage:22.0.1")
+
     implementation("com.google.android.material:material:1.13.0")
+
+    implementation("com.github.bumptech.glide:glide:5.0.5")
 
 }

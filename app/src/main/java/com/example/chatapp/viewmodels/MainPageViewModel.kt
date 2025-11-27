@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatapp.data.entity.UserListItem
+import com.example.chatapp.util.hasher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -18,18 +19,11 @@ import com.google.firebase.firestore.auth.User
 @HiltViewModel
 class MainPageViewModel @Inject constructor() : ViewModel() {
 
-    private val _temp = MutableLiveData<String>()
-    val temp: LiveData<String> = _temp
-
-    private val _latitude = MutableLiveData<Float>()
-    val latitude: LiveData<Float> = _latitude
-    private val _longitude = MutableLiveData<Float>()
-    val longitude: LiveData<Float> = _longitude
-
     private val _userList = MutableLiveData<List<UserListItem>>()
     val userList: LiveData<List<UserListItem>> = _userList
 
     val userListRef = FirebaseFirestore.getInstance().collection("users")
+
 
     init {
         fetchUserList()

@@ -33,15 +33,20 @@ class LoginPage : Fragment() { // Fragment'ı bu şekilde tanımlayın
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         binding.girisYap.setOnClickListener {
+            binding.girisYap.isEnabled = false
+            binding.girisYap.alpha = 0.5f
             val eMail = binding.eMailTextField.text.toString().trim()
             val password = binding.passwordTextField.text.toString()
 
             FirebaseAuth.getInstance().signInWithEmailAndPassword(eMail, password).addOnSuccessListener {
                 Toast.makeText(requireContext(), "Başarılı", Toast.LENGTH_SHORT).show()
+                binding.girisYap.isEnabled = true
+                binding.girisYap.alpha = 1f
                 findNavController().navigate(LoginPageDirections.loginToMain())
             }.addOnFailureListener {
+                binding.girisYap.isEnabled = true
+                binding.girisYap.alpha = 1f
                 Toast.makeText(requireContext(), "Başarısız ${it}", Toast.LENGTH_SHORT).show()
             }
         }

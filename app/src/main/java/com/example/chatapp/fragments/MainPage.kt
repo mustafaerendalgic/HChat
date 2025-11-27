@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chatapp.R
@@ -14,6 +15,7 @@ import com.example.chatapp.adapters.UserListAdapter
 import com.example.chatapp.data.entity.UserListItem
 import com.example.chatapp.databinding.FragmentMainPageBinding
 import com.example.chatapp.viewmodels.MainPageViewModel
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,6 +50,11 @@ class MainPage : Fragment() {
         userListAdapter.submitList(userList)
         binding.userList.adapter = userListAdapter
         binding.userList.layoutManager = layoutManager
+
+        binding.button.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            findNavController().navigate(R.id.mainToLogin)
+        }
 
         return binding.root
     }
