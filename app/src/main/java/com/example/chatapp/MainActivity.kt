@@ -1,10 +1,12 @@
 package com.example.chatapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -29,19 +31,37 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val navHostFragment = binding.fragmentContainerView
-        val navController = navHostFragment.findNavController()
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment?
 
-        val auth = FirebaseAuth.getInstance()
+        if (navHostFragment != null) {
 
-        val authStateListener = FirebaseAuth.AuthStateListener{ authState ->
-            val user = authState.currentUser
-            if(user != null){
-                navController.navigate(R.id.loginToMain)
+            val navController = navHostFragment.navController
+
+            val auth = FirebaseAuth.getInstance()
+
+            val authStateListener = FirebaseAuth.AuthStateListener { authState ->
+                val user = authState.currentUser
+                if (user != null) {
+                    when(navController.currentDestination?.id){
+                        R.id.loginPage -> navController.navigate(R.id.loginToMain)
+                        R.id.signUpPage -> navController.navigate(R.id.signToLogin)
+                    }
+                }
+                else{
+                    when(navController.currentDestination?.id){
+                        R.id.mainPage -> navController.navigate(R.id.mainToLogin)
+                        R.id.chatPage -> navController.navigate(R.id.chatToLogin)
+                    }
+                }
             }
+
+            auth.addAuthStateListener(authStateListener)
+
+
+        } else {
+            Log.e("MainActivity", "NavHostFragment not found!")
         }
 
-        auth.addAuthStateListener(authStateListener)
 
     }
 }

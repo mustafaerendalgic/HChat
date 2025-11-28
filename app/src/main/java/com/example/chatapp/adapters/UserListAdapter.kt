@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.ListAdapter
@@ -16,6 +17,7 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.example.chatapp.R
 import com.example.chatapp.data.entity.UserListItem
 import com.example.chatapp.util.hasher
+import com.example.chatapp.viewmodels.ChatPageViewModel
 import com.google.api.Context
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -33,8 +35,7 @@ class UserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
 
 }
 
-class UserListAdapter() : ListAdapter<UserListItem, UserListViewHolder>(DiffCallback()) {
-    val profilePictureRef = FirebaseFirestore.getInstance().collection("profile_pics")
+class UserListAdapter(private val chatPageViewModel: ChatPageViewModel) : ListAdapter<UserListItem, UserListViewHolder>(DiffCallback()) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -50,19 +51,17 @@ class UserListAdapter() : ListAdapter<UserListItem, UserListViewHolder>(DiffCall
 
         val item = getItem(position)
 
-        profilePictureRef.document(item.nick).get().addOnSuccessListener {
-            if(it.exists()){
-                val url = it.get("ppURL")
-                Log.d("profpic", url.toString())
-                Glide.with(holder.profilePicture.context).load(url.toString()).error(R.drawable.outline_photo_camera_24).into(holder.profilePicture)
-            }
-        }.addOnFailureListener {
-            Log.d("profpic", it.toString())
-        }
+
+        Glide.with(holder.itemView.context).load(item.profilePicture).error(R.drawable.outline_photo_camera_24).into(holder.profilePicture)
 
         holder.lastMessage.text = "Say hi to ${item.nick}!"
 
         holder.nickname.text = item.nick
+
+        holder.itemView.setOnClickListener {
+            chatPageViewModel.setTheUserToChat(item)
+            Navigation.findNavController(it).navigate(R.id.mainToChat)
+        }
 
     }
 }

@@ -39,6 +39,9 @@
         <action
             android:id="@+id/chatToMain"
             app:destination="@id/mainPage" />
+        <action
+            android:id="@+id/chatToLogin"
+            app:destination="@id/loginPage" />
     </fragment>
     <fragment
         android:id="@+id/signUpPage"

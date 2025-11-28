@@ -24,17 +24,16 @@ class MainPageViewModel @Inject constructor() : ViewModel() {
 
     val userListRef = FirebaseFirestore.getInstance().collection("users")
 
-
     init {
         fetchUserList()
     }
 
     fun fetchUserList(){
-
+        val list = ArrayList<UserListItem>()
         userListRef.get().addOnSuccessListener { data ->
-            val list = ArrayList<UserListItem>()
+
             for (document in data.documents){
-                list.add(UserListItem(nick = document.id.toString()))
+                list.add(UserListItem(profilePicture = document.get("profile_pic") as String, nick = document.id.toString()))
             }
             _userList.value = list
             Log.d("userlist", "${list}")

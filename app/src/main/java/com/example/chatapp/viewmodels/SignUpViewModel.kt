@@ -26,7 +26,6 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
     private val uid = FirebaseAuth.getInstance().uid.toString()
     private val usersRef = FirebaseFirestore.getInstance().collection("users")
     private val emailRef = FirebaseFirestore.getInstance().collection("emails")
-    private val profilePictureRef = FirebaseFirestore.getInstance().collection("profile_pics")
     private val storage = FirebaseStorage.getInstance().reference
 
 
@@ -38,7 +37,7 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener {
                 Toast.makeText(context, "Başarılı", Toast.LENGTH_SHORT).show()
-                usersRef.document(nickname).set(mapOf(hasher(uid) to email),SetOptions.merge())
+
                 emailRef.document(email).set(mapOf(hasher(uid) to email))
                 val ppRef = storage.child(nickname).child("profile-picture.jpg")
 
@@ -46,7 +45,7 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
 
                     ppRef.downloadUrl.addOnSuccessListener {
                         val imageUrl = it.toString()
-                        profilePictureRef.document(nickname).set(mapOf("ppURL" to imageUrl))
+                        usersRef.document(nickname).set(mapOf("profile_pic" to imageUrl))
                     }
 
                 }

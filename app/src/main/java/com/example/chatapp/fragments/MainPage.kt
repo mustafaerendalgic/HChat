@@ -14,6 +14,7 @@ import com.example.chatapp.R
 import com.example.chatapp.adapters.UserListAdapter
 import com.example.chatapp.data.entity.UserListItem
 import com.example.chatapp.databinding.FragmentMainPageBinding
+import com.example.chatapp.viewmodels.ChatPageViewModel
 import com.example.chatapp.viewmodels.MainPageViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainPage : Fragment() {
 
     val viewmodel: MainPageViewModel by activityViewModels()
+    val chatPageViewModel: ChatPageViewModel by activityViewModels()
 
     private lateinit var binding: FragmentMainPageBinding
     private val mainPageViewModel: MainPageViewModel by activityViewModels()
@@ -38,7 +40,7 @@ class MainPage : Fragment() {
 
         mainPageViewModel.fetchUserList()
 
-        val userListAdapter = UserListAdapter()
+        val userListAdapter = UserListAdapter(chatPageViewModel)
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         var userList = listOf<UserListItem>()

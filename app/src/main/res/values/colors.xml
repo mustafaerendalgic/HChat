@@ -3,8 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="primary">#329ea8</color>
+    <color name="primary2">#aa329ea8</color>
     <color name="primary1">#5bc980</color>
     <color name="textColor">#000000</color>
     <color name="background">#ffffff</color>
-    <color name="gray">#44ffffff</color>
+    <color name="gray">#09000000</color>
 </resources>
