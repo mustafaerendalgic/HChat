@@ -2,6 +2,7 @@ package com.example.chatapp.viewmodels
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
@@ -29,26 +30,32 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
     private val storage = FirebaseStorage.getInstance().reference
 
 
-    private fun signUpUser(email: String, password: String, nickname: String, context: Context, button: AppCompatButton, profilePicture: Uri){
+    private fun signUpUser(email: String, password: String, nickname: String, context: Context, button: AppCompatButton, profilePicture: Uri, onResult: () -> Unit){
 
         button.isEnabled = false
         button.alpha = 0.5f
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-            .addOnSuccessListener {
+            .addOnSuccessListener { user ->
+
                 Toast.makeText(context, "Başarılı", Toast.LENGTH_SHORT).show()
 
-                emailRef.document(email).set(mapOf(hasher(uid) to email))
+                emailRef.document(email).set(mapOf("nickname" to nickname))
                 val ppRef = storage.child(nickname).child("profile-picture.jpg")
 
                 ppRef.putFile(profilePicture).addOnSuccessListener {
 
                     ppRef.downloadUrl.addOnSuccessListener {
                         val imageUrl = it.toString()
-                        usersRef.document(nickname).set(mapOf("profile_pic" to imageUrl))
+                        usersRef.document(user.user!!.uid).set(mapOf("profile_pic" to imageUrl, "nickname" to nickname))
+                        Log.d("profilepic", imageUrl)
                     }
 
+                }.addOnFailureListener {
+                    Log.d("profilepic", it.toString())
                 }
+
+                onResult()
 
                 button.isEnabled = true
                 button.alpha = 1f
@@ -59,7 +66,7 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
             }
     }
 
-    fun checkAndSignUserUp(email: String, password: String, nickname: String, context: Context, button: androidx.appcompat.widget.AppCompatButton, profilePicture: Uri): Boolean{
+    fun checkAndSignUserUp(email: String, password: String, nickname: String, context: Context, button: androidx.appcompat.widget.AppCompatButton, profilePicture: Uri, onResult : () -> Unit): Boolean{
 
         button.isEnabled = false
         button.alpha = 0.5f
@@ -80,14 +87,14 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
                     Toast.makeText(context, ContextCompat.getString(context, R.string.nickNameIsUsed), Toast.LENGTH_SHORT).show()
                 }
                 else{
-                    emailRef.document(email).get().addOnSuccessListener {
+                    emailRef.document(nickname).get().addOnSuccessListener {
                         if(it.exists()){
                             button.isEnabled = true
                             button.alpha = 1f
                             Toast.makeText(context, ContextCompat.getString(context, R.string.emailIsUsed), Toast.LENGTH_SHORT).show()
                         }
                         else{
-                            signUpUser(email, password, nickname, context, button, profilePicture)
+                            signUpUser(email, password, nickname, context, button, profilePicture, onResult)
                         }
                     }
                 }

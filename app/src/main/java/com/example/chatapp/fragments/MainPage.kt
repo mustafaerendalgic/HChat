@@ -1,6 +1,7 @@
 package com.example.chatapp.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainPage : Fragment() {
 
-    val viewmodel: MainPageViewModel by activityViewModels()
+
     val chatPageViewModel: ChatPageViewModel by activityViewModels()
 
     private lateinit var binding: FragmentMainPageBinding
@@ -38,22 +39,17 @@ class MainPage : Fragment() {
     ): View? {
         binding = FragmentMainPageBinding.inflate(inflater, container, false)
 
-        mainPageViewModel.fetchUserList()
-
         val userListAdapter = UserListAdapter(chatPageViewModel)
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
-        var userList = listOf<UserListItem>()
 
         mainPageViewModel.userList.observe(viewLifecycleOwner) { data ->
             userListAdapter.submitList(data)
         }
-
-        userListAdapter.submitList(userList)
         binding.userList.adapter = userListAdapter
         binding.userList.layoutManager = layoutManager
 
         binding.button.setOnClickListener {
+            Log.d("buton_basildi", "Buton Basıldı")
             FirebaseAuth.getInstance().signOut()
             findNavController().navigate(R.id.mainToLogin)
         }

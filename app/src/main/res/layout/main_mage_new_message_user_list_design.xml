@@ -6,7 +6,7 @@
     android:layout_height="64dp">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profilePhoto"
+        android:id="@+id/unseen_profilePhoto"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:src="@color/primary"
@@ -24,7 +24,7 @@
         android:layout_marginVertical="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profilePhoto"
+        app:layout_constraintStart_toEndOf="@+id/unseen_profilePhoto"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.Guideline
@@ -35,7 +35,7 @@
             app:layout_constraintGuide_percent="0.5" />
 
         <TextView
-            android:id="@+id/username"
+            android:id="@+id/unseen_username"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="John Doe"
@@ -47,43 +47,62 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/lastMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:text="Say hi to John Doe!"
+            android:id="@+id/unseen_lastMessage"
             style="@style/primaryTextStyle"
-            android:alpha="0.5"
-            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="1"
+            android:gravity="left"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingEnd="8dp"
+            android:text="Say hi to John Doe!"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/unseen_lastMessageDate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide" />
 
 
-        <ImageView
-            android:id="@+id/messageSeen"
+        <TextView
+            android:id="@+id/unseen_lastMessageDate"
+            style="@style/primaryTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:paddingVertical="4dp"
-            android:layout_marginTop="2.5dp"
-            android:layout_marginBottom="-1.5dp"
-            android:src="@drawable/outline_arrows_more_up_24"
+            android:layout_marginTop="1.5dp"
+            android:alpha="0.5"
+            android:gravity="center"
+            android:text="13.33"
+            android:textSize="12.5sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/guide"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/howManyUnseenBalloon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:shapeAppearanceOverlay="@style/CircularImageViewStyle"
+            android:background="@color/primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/guide"/>
 
         <TextView
-            android:id="@+id/lastMessageDate"
-            android:layout_width="wrap_content"
+            android:id="@+id/howManyUnseenText"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="13.33"
-            android:alpha="0.5"
-            android:layout_marginTop="1.5dp"
-            android:textSize="12.5sp"
+            style="@style/primaryTextStyleOnBackground"
             android:gravity="center"
-            style="@style/primaryTextStyle"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/messageSeen"
-            app:layout_constraintTop_toBottomOf="@id/guide" />
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMaxTextSize="11.5sp"
+            android:autoSizeMinTextSize="1sp"
+            app:layout_constraintBottom_toBottomOf="@+id/howManyUnseenBalloon"
+            app:layout_constraintStart_toStartOf="@+id/howManyUnseenBalloon"
+            app:layout_constraintTop_toTopOf="@id/howManyUnseenBalloon"
+            app:layout_constraintEnd_toEndOf="@id/howManyUnseenBalloon"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

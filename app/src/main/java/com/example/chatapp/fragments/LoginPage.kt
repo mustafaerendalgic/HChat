@@ -33,6 +33,19 @@ class LoginPage : Fragment() { // Fragment'ı bu şekilde tanımlayın
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val auth = FirebaseAuth.getInstance()
+
+        val authStateListener = FirebaseAuth.AuthStateListener { authState ->
+            val user = authState.currentUser
+            if (user != null && isAdded) {
+                if(findNavController().currentDestination?.id == R.id.loginPage) {
+                    findNavController().navigate(R.id.loginToMain)
+                }
+            }
+        }
+
+        auth.addAuthStateListener(authStateListener)
+
         binding.girisYap.setOnClickListener {
             binding.girisYap.isEnabled = false
             binding.girisYap.alpha = 0.5f
@@ -43,7 +56,9 @@ class LoginPage : Fragment() { // Fragment'ı bu şekilde tanımlayın
                 Toast.makeText(requireContext(), "Başarılı", Toast.LENGTH_SHORT).show()
                 binding.girisYap.isEnabled = true
                 binding.girisYap.alpha = 1f
-                findNavController().navigate(LoginPageDirections.loginToMain())
+                if (isAdded) {
+                    findNavController().navigate(R.id.loginToMain)
+                }
             }.addOnFailureListener {
                 binding.girisYap.isEnabled = true
                 binding.girisYap.alpha = 1f

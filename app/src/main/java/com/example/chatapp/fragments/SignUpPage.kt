@@ -38,9 +38,7 @@ class SignUpPage : Fragment() {
     ): View? {
         binding = FragmentSignUpPageBinding.inflate(inflater, container, false)
 
-        binding.girisYap.setOnClickListener {
-            findNavController().popBackStack()
-        }
+
 
         val imageChoosingLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){ uri1 ->
 
@@ -74,7 +72,9 @@ class SignUpPage : Fragment() {
 
                 else{
                     signUpPageViewModel.checkAndSignUserUp(
-                        email, password, nickname, requireContext(), binding.createAccountSignUp, uri!!)
+                        email, password, nickname, requireContext(), binding.createAccountSignUp, uri!!, onResult = {
+                            findNavController().navigate(R.id.signToMain)
+                        })
                 }
 
             }

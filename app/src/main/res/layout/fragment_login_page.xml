@@ -1,138 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.LoginPage"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:fillViewport="true"
+    tools:context=".fragments.LoginPage">
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:layout_marginEnd="14dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/logo"
-        app:layout_constraintBottom_toTopOf="@+id/eMailTextFieldBox"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/eMailTextFieldBox"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_height="match_parent">
 
-        app:boxStrokeColor="@color/primary"
-        style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox"
-        app:layout_constraintBottom_toTopOf="@id/guideVertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_marginEnd="14dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo"
+            app:layout_constraintBottom_toTopOf="@+id/eMailTextFieldBox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <EditText
-            android:id="@+id/eMailTextField"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/eMailTextFieldBox"
+            style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/primaryTextStyle"
-            android:hint="@string/eMail"/>
+            android:layout_marginStart="32dp"
+
+            android:layout_marginEnd="32dp"
+            app:boxStrokeColor="@color/primary"
+            app:layout_constraintBottom_toTopOf="@id/guideVertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <EditText
+                android:id="@+id/eMailTextField"
+                style="@style/primaryTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/eMail" />
 
 
-    </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordTextFieldBox"
-        style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        app:boxStrokeColor="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideVertical">
-
-        <EditText
-            android:id="@+id/passwordTextField"
-            style="@style/primaryTextStyle"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordTextFieldBox"
+            style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password" />
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            app:boxStrokeColor="@color/primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideVertical">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <EditText
+                android:id="@+id/passwordTextField"
+                style="@style/primaryTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password" />
 
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/girisYap"
-        style="@style/primaryTextStyleOnBackground"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/button_style"
-        android:text="@string/login"
-        android:textAllCaps="false"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/eMailTextFieldBox"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTextFieldBox" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-    <TextView
-        android:id="@+id/forgotPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/forgot_password"
-        style="@style/primaryTextStyle"
-        android:textStyle="bold"
-        android:textColor="@color/primary"
-        app:layout_constraintBottom_toBottomOf="@+id/girisYap"
-        app:layout_constraintStart_toStartOf="@+id/passwordTextFieldBox"
-        app:layout_constraintTop_toTopOf="@+id/girisYap" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guide"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.54" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideVertical"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintGuide_percent="0.5"/>
-
-    <TextView
-        android:id="@+id/tex"
-        style="@style/primaryTextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="@string/create_account_head"
-
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="@+id/guide"
-        app:layout_constraintTop_toBottomOf="@+id/girisYap" />
-
-    <TextView
-        android:id="@+id/createAccount"
-        style="@style/primaryTextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="40dp"
-        android:text="@string/create_account"
-        android:textColor="@color/primary"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/guide"
-        app:layout_constraintTop_toBottomOf="@+id/girisYap" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/girisYap"
+            style="@style/primaryTextStyleOnBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_style"
+            android:text="@string/login"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/eMailTextFieldBox"
+            app:layout_constraintTop_toBottomOf="@+id/passwordTextFieldBox" />
 
 
+        <TextView
+            android:id="@+id/forgotPassword"
+            style="@style/primaryTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forgot_password"
+            android:textColor="@color/primary"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/girisYap"
+            app:layout_constraintStart_toStartOf="@+id/passwordTextFieldBox"
+            app:layout_constraintTop_toTopOf="@+id/girisYap" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="189dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideVertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <TextView
+            android:id="@+id/tex"
+            style="@style/primaryTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/create_account_head"
+
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/guide"
+            app:layout_constraintTop_toBottomOf="@+id/girisYap" />
+
+        <TextView
+            android:id="@+id/createAccount"
+            style="@style/primaryTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/create_account"
+            android:textColor="@color/primary"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/guide"
+            app:layout_constraintTop_toBottomOf="@+id/girisYap" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>

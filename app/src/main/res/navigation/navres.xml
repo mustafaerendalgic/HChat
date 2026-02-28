@@ -50,6 +50,11 @@
         tools:layout="@layout/fragment_sign_up_page" >
         <action
             android:id="@+id/signToLogin"
-            app:destination="@id/loginPage" />
+            app:destination="@id/loginPage"
+            app:popUpTo="@id/signUpPage"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/signToMain"
+            app:destination="@id/mainPage" />
     </fragment>
 </navigation>

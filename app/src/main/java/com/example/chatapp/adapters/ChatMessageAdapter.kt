@@ -1,18 +1,26 @@
 package com.example.chatapp.adapters
 
 import android.media.browse.MediaBrowser
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.chatapp.R
 import com.example.chatapp.data.entity.ChatMessage
+import com.example.chatapp.util.formatDate
+import com.example.chatapp.viewmodels.ChatPageViewModel
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.api.Distribution
+import com.google.firebase.firestore.FirebaseFirestore
 import org.w3c.dom.Text
 
 class SenderMessageViewHolder(item: View) : RecyclerView.ViewHolder(item) {
@@ -28,7 +36,7 @@ class ReceiverMessageViewHolder(item: View) : RecyclerView.ViewHolder(item) {
     val timestamp: TextView = item.findViewById(R.id.timestampReceiver)
 }
 
-class ChatMessageAdapter(private val uid: String): ListAdapter<ChatMessage, RecyclerView.ViewHolder>(DiffCallbackForChat()){
+class ChatMessageAdapter(private val uid: String, private val rv: RecyclerView, private val chatPageViewModel: ChatPageViewModel): ListAdapter<ChatMessage, RecyclerView.ViewHolder>(DiffCallbackForChat()){
 
     val RECEIVER_VIEW_TYPE = 0
     val SENDER_VIEW_TYPE = 1
@@ -67,15 +75,33 @@ class ChatMessageAdapter(private val uid: String): ListAdapter<ChatMessage, Recy
         when(holder.itemViewType){
             RECEIVER_VIEW_TYPE -> {
                 holder as ReceiverMessageViewHolder
-                holder.receiverNickname.text = message.message
-                holder.timestamp.text = message.timestamp
+
+                holder.receiverNickname.text = message.nickname
+                holder.timestamp.text = formatDate(message.timestamp)
                 holder.receiverMessage.text = message.message
-                Glide.with(holder.itemView).load(message.profilePicture).error(R.drawable.outline_photo_camera_24).into(holder.receiverProfilePicture)
+                FirebaseFirestore.getInstance().collection("users").document(message.uid!!).get().addOnSuccessListener {
+                    Glide.with(holder.itemView).load(it.get("profile_pic") as String).error(R.drawable.outline_photo_camera_24).into(holder.receiverProfilePicture)
+                }.addOnFailureListener {
+                    Toast.makeText(holder.itemView.context, it.toString(), Toast.LENGTH_SHORT).show()
+                }
+
             }
             else -> {
                 holder as SenderMessageViewHolder
+                if(message.seen == true){
+                    holder.senderDelivered.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context, R.drawable.outline_arrows_more_up_24))
+                }
+                else {
+                    holder.senderDelivered.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            holder.itemView.context,
+                            R.drawable.arrow_up
+                        )
+                    )
+                    Log.d("mesupdate", "created as not seen")
+                }
                 holder.senderMessage.text = message.message
-                holder.senderTimestamp.text = message.timestamp
+                holder.senderTimestamp.text = formatDate(message.timestamp)
             }
         }
     }
@@ -83,6 +109,7 @@ class ChatMessageAdapter(private val uid: String): ListAdapter<ChatMessage, Recy
 }
 
 class DiffCallbackForChat: DiffUtil.ItemCallback<ChatMessage>(){
+
     override fun areItemsTheSame(
         oldItem: ChatMessage,
         newItem: ChatMessage
@@ -94,7 +121,9 @@ class DiffCallbackForChat: DiffUtil.ItemCallback<ChatMessage>(){
         oldItem: ChatMessage,
         newItem: ChatMessage
     ): Boolean {
-        return oldItem == newItem
+        return oldItem.message == newItem.message &&
+                oldItem.seen == newItem.seen &&
+                oldItem.timestamp == newItem.timestamp
     }
 
 }
