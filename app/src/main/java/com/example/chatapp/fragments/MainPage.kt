@@ -42,8 +42,8 @@ class MainPage : Fragment() {
         val userListAdapter = UserListAdapter(chatPageViewModel)
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        mainPageViewModel.userList.observe(viewLifecycleOwner) { data ->
-            userListAdapter.submitList(data)
+        mainPageViewModel.finalUserList.observe(viewLifecycleOwner) { list ->
+            userListAdapter.submitList(list)
         }
         binding.userList.adapter = userListAdapter
         binding.userList.layoutManager = layoutManager

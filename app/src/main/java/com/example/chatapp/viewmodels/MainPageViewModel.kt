@@ -47,7 +47,7 @@ class MainPageViewModel @Inject constructor() : ViewModel() {
     private lateinit var listListener : ListenerRegistration
 
     init {
-        fetchUserList()
+
     }
 
     fun allUsersFlow(): Flow<List<UserListItem>> = callbackFlow {
@@ -86,7 +86,8 @@ class MainPageViewModel @Inject constructor() : ViewModel() {
         awaitClose{listener.remove()}
     }
 
-    val finalUserList : LiveData<List<UserListItem>> = allUsersFlow().combine(lastMessageFlow()) { allUsers, recentChat ->
+    val finalUserList : LiveData<List<UserListItem>> = allUsersFlow().combine(lastMessageFlow())
+    { allUsers, recentChat ->
         allUsers.map { user ->
             val recentInfo = recentChat[user.uid]
             if(recentInfo != null){
@@ -111,7 +112,7 @@ class MainPageViewModel @Inject constructor() : ViewModel() {
 
     }
 
-    fun fetchUserList(){
+    /*fun fetchUserList(){
         if(_uid == null)
             return
 
@@ -159,7 +160,7 @@ class MainPageViewModel @Inject constructor() : ViewModel() {
             }
         }
 
-    }
+    }*/
 
     override fun onCleared() {
         super.onCleared()
