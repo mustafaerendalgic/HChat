@@ -112,30 +112,37 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.5" />
 
-        <TextView
-            android:id="@+id/tex"
-            style="@style/primaryTextStyle"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="@string/create_account_head"
+            app:layout_constraintEnd_toEndOf="@+id/girisYap"
+            app:layout_constraintStart_toStartOf="@+id/forgotPassword"
+            app:layout_constraintTop_toBottomOf="@+id/girisYap">
 
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="@+id/guide"
-            app:layout_constraintTop_toBottomOf="@+id/girisYap" />
+            <TextView
+                android:id="@+id/tex"
+                style="@style/primaryTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/create_account_head"
+                android:textColor="@color/black" />
 
-        <TextView
-            android:id="@+id/createAccount"
-            style="@style/primaryTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="40dp"
-            android:text="@string/create_account"
-            android:textColor="@color/primary"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/guide"
-            app:layout_constraintTop_toBottomOf="@+id/girisYap" />
+            <TextView
+                android:id="@+id/createAccount"
+                style="@style/primaryTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="40dp"
+                android:text="@string/create_account"
+                android:textColor="@color/primary"
+                android:textStyle="bold"/>
+
+
+        </LinearLayout>
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

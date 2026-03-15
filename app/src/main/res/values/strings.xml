@@ -2,18 +2,33 @@
     <string name="app_name">chatApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--
+        <string name="forgot_password">Şifremi Unuttum</string>
+        <string name="create_account">Hesap oluştur</string>
+        <string name="create_account_head">Bir hesabın yok mu?</string>
+        <string name="login">Giriş Yap</string>
+        <string name="signUp">Kayıt Ol</string>
+        <string name="eMail">E-mail</string>
+        <string name="password">Şifre</string>
+        <string name="nicknamesBlank">İsimler boşluk içeremez</string>
+        <string name="nickNameIsUsed">Nickname zaten kullanımda</string>
+        <string name="emailIsUsed">E-mail zaten kullanımda</string>
+        <string name="putProfilePicture">Lütfen bir profil fotoğrafı yükleyin</string>
+        <string name="isBlank">Lütfen tüm alanları doldurduğunuzdan emin olun</string>
 
-    <string name="forgot_password">Şifremi Unuttum</string>
-    <string name="create_account">Hesap oluştur</string>
-    <string name="create_account_head">Bir hesabın yok mu?</string>
-    <string name="login">Giriş Yap</string>
-    <string name="signUp">Kayıt Ol</string>
-    <string name="eMail">E-mail</string>
-    <string name="password">Şifre</string>
-    <string name="nicknamesBlank">İsimler boşluk içeremez</string>
-    <string name="nickNameIsUsed">Nickname zaten kullanımda</string>
-    <string name="emailIsUsed">E-mail zaten kullanımda</string>
-    <string name="putProfilePicture">Lütfen bir profil fotoğrafı yükleyin</string>
-    <string name="isBlank">Lütfen tüm alanları doldurduğunuzdan emin olun</string>
+        <string name="hello_blank_fragment">Hello blank fragment</string>-->
 
-</resources>
+        <string name="forgot_password">Forgot my password</string>
+        <string name="create_account">Create one</string>
+        <string name="create_account_head">Dont have an account?</string>
+        <string name="login">Log in</string>
+        <string name="signUp">Sign up</string>
+        <string name="eMail">E-mail</string>
+        <string name="password">Password</string>
+        <string name="nicknamesBlank">Names can not have spaces</string>
+        <string name="nickNameIsUsed">Nickname is already in use</string>
+        <string name="emailIsUsed">E-mail is already in use</string>
+        <string name="putProfilePicture">Please upload a profile picture</string>
+        <string name="isBlank">Please make sure you filled all the fields</string>
+
+    </resources>

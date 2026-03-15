@@ -23,11 +23,13 @@ class seenUserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
     val nickname: TextView
     val lastMessage: TextView
     val messageStatus: ImageView
+    val lastMessageDate: TextView
     init {
         profilePicture = item.findViewById<ImageView>(R.id.profilePhoto)
         nickname = item.findViewById<TextView>(R.id.username)
         lastMessage = item.findViewById<TextView>(R.id.lastMessage)
         messageStatus = item.findViewById<ImageView>(R.id.messageSeen)
+        lastMessageDate = item.findViewById<TextView>(R.id.lastMessageDate)
     }
 
 }
@@ -101,12 +103,14 @@ class UserListAdapter(private val chatPageViewModel: ChatPageViewModel) : ListAd
                 }
                 else{
                     holder.messageStatus.visibility = View.VISIBLE
+                    holder.lastMessageDate.visibility = View.VISIBLE
                     if(item.lastMessageBy == uid){
                         holder.lastMessage.text = "You: " + item.lastMessage
                     }
                     else{
                         holder.lastMessage.text = item.lastMessage
                     }
+                    holder.lastMessageDate.text = item.lastMessageDate
                 }
 
                 holder.nickname.text = if(uid != item.uid)item.nick else item.nick + " (You)"

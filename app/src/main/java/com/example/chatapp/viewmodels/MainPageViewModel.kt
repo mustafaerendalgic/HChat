@@ -99,7 +99,7 @@ class MainPageViewModel @Inject constructor() : ViewModel() {
             else{
                 user
             }
-        }.sortedBy { it.lastMessageDate }
+        }.sortedBy { it.lastMessageDate }.reversed()
     }.asLiveData()
 
     fun fixTheTimestamp(timestamp: Timestamp?): String{
