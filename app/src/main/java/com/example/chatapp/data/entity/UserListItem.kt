@@ -7,7 +7,7 @@ data class UserListItem(
     val uid: String,
     val profilePicture: String? = null,
     val howManyUnseenMessage: Int = 0,
-    val lastMessageDate: String = "13.33",
+    val lastMessageDate: String = "",
     var lastMessage: String? = null,
     var lastMessageBy: String? = null,
     val lastMessageStatus: Int = 0

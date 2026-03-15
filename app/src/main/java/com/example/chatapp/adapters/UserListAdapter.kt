@@ -100,6 +100,7 @@ class UserListAdapter(private val chatPageViewModel: ChatPageViewModel) : ListAd
                     holder.lastMessage.text =  "Say hi to ${item.nick}!"
                 }
                 else{
+                    holder.messageStatus.visibility = View.VISIBLE
                     if(item.lastMessageBy == uid){
                         holder.lastMessage.text = "You: " + item.lastMessage
                     }

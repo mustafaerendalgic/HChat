@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.chatapp.data.entity.ChatMessage
 import com.example.chatapp.data.entity.UserListItem
 import com.google.firebase.Firebase
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -16,13 +17,17 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.auth.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
+import kotlin.math.max
+import kotlin.math.min
 
 @HiltViewModel
 class ChatPageViewModel @Inject constructor(): ViewModel() {
@@ -51,7 +56,9 @@ class ChatPageViewModel @Inject constructor(): ViewModel() {
         val recentRef = userRef.document(uid).collection("recent_chats").document(partnerUid)
         val recentRefPartner = userRef.document(partnerUid).collection("recent_chats").document(uid)
 
-        databaseRef = database.getReference("chats").child(uid).child(partnerUid)
+        val fileName = minOf(uid, partnerUid).toString() + "-" + maxOf(uid, partnerUid).toString()
+
+        databaseRef = database.getReference("chats").child(fileName)
         userRef.document(uid).get().addOnSuccessListener { data ->
             val messRef = databaseRef!!.push()
             val messageObject = ChatMessage(messRef.key , uid, message, currentDate, "0", data.get("nickname").toString(), false)
@@ -60,8 +67,8 @@ class ChatPageViewModel @Inject constructor(): ViewModel() {
 
             val batch = FirebaseFirestore.getInstance().batch()
 
-            val updateYourLastMessage = mapOf("lastMessage" to message, "lastMessageBy" to uid)
-            val updatePartnerLastMessage = mapOf("lastMessage" to message, "lastMessageBy" to uid)
+            val updateYourLastMessage = mapOf("lastMessage" to message, "lastMessageBy" to uid, "timestamp" to FieldValue.serverTimestamp())
+            val updatePartnerLastMessage = mapOf("lastMessage" to message, "lastMessageBy" to uid, "timestamp" to FieldValue.serverTimestamp())
 
             batch.set(recentRefPartner, updatePartnerLastMessage, SetOptions.merge())
             batch.set(recentRef, updateYourLastMessage, SetOptions.merge())
@@ -88,7 +95,10 @@ class ChatPageViewModel @Inject constructor(): ViewModel() {
 
         stopChatListener()
 
-        val dbRef = database.getReference("chats").child(uid).child(partner.uid)
+        val partnerUid = _theUserToChat.value!!.uid
+        val fileName = minOf(uid, partnerUid).toString() + "-" + maxOf(uid, partnerUid).toString()
+
+        val dbRef = database.getReference("chats").child(fileName)
         valueEventListener = dbRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val updatedChat = ArrayList<ChatMessage>()
@@ -112,16 +122,16 @@ class ChatPageViewModel @Inject constructor(): ViewModel() {
         })
     }
 
-    fun updateSeenStatus(obj : ChatMessage, increment: () -> Unit ){
+    fun updateSeenStatus(obj : ChatMessage){
         if(uid == null)
             return
         val partnerUid = _theUserToChat.value!!.uid
         Log.d("mesupdate1", obj.toString())
 
-        val dbRef = FirebaseDatabase.getInstance().reference.child("chats").child(uid).child(partnerUid).child(obj.messageID.toString())
+        val fileName = minOf(uid, partnerUid).toString() + "-" + maxOf(uid, partnerUid).toString()
+        val dbRef = FirebaseDatabase.getInstance().reference.child("chats").child(fileName).child(obj.messageID.toString())
 
         dbRef.updateChildren(mapOf("seen" to true)).addOnSuccessListener {
-            increment()
             Log.d("mesupdate1", "Başarılı")
 
         }.addOnFailureListener {
@@ -131,10 +141,13 @@ class ChatPageViewModel @Inject constructor(): ViewModel() {
     }
 
     fun updateSeenCount(i: Int){
-        if(uid == null)
+        if(uid == null) {
+            Log.d("updateSeen", "uid null")
             return
+        }
 
         if(_theUserToChat.value == null){
+            Log.d("updateSeen", "partner uid null")
             return
         }
 
@@ -143,17 +156,15 @@ class ChatPageViewModel @Inject constructor(): ViewModel() {
         val userRef = FirebaseFirestore.getInstance().collection("users")
         val recentRef = userRef.document(uid).collection("recent_chats").document(partnerUid)
 
-        recentRef.get().addOnSuccessListener {
-            val lastCount = it.get("unseenMessageCount") as Int
-            if(lastCount == 0)
-                return@addOnSuccessListener
-            else if(lastCount < i){
-                recentRef.set(mapOf("unseenMessageCount" to 0), SetOptions.merge())
-            }
-            else{
-                recentRef.set(mapOf("unseenMessageCount" to (lastCount - i)), SetOptions.merge())
+        recentRef.update("unseenMessageCount", FieldValue.increment(-i.toLong())).addOnSuccessListener {
+            recentRef.get().addOnSuccessListener { snapshot ->
+                val current = snapshot.getLong("unseenMessageCount") ?: 0
+                if (current < 0) {
+                    recentRef.update("unseenMessageCount", 0)
+                }
             }
         }
+
     }
 
     fun setTheUserToChat(user: UserListItem){

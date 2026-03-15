@@ -53,8 +53,15 @@ class ChatPage : Fragment() {
         }
 
         val adapter = ChatMessageAdapter(uid, binding.chatMessageRV, chatPageViewModel)
+
         chatPageViewModel.chat.observe(viewLifecycleOwner) {
             Log.d("listeee", it.toString())
+            val lastMessage = it.lastOrNull()
+            Log.d("lastMessage", lastMessage.toString())
+            if(lastMessage != null && !lastMessage.seen && lastMessage.uid != uid) {
+                chatPageViewModel.updateSeenStatus(lastMessage)
+                chatPageViewModel.updateSeenCount(1)
+            }
             adapter.submitList(it)
             binding.chatMessageRV.post {
                 try {
@@ -72,20 +79,26 @@ class ChatPage : Fragment() {
         binding.chatMessageRV.layoutManager = layoutManager
 
         binding.chatMessageRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val firstVisible = layoutManager.findFirstVisibleItemPosition()
-                val lastVisible = layoutManager.findLastVisibleItemPosition()
-                if(firstVisible == RecyclerView.NO_POSITION) return
-                var i = 0
-                for (index in firstVisible..lastVisible){
-                    val message = adapter.currentList.get(index) ?: continue
-                    if(message.seen == false && message.uid != uid){
-                        chatPageViewModel.updateSeenStatus(message, increment = {i++})
-                    }
-                }
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
 
+                if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                    val firstVisible = layoutManager.findFirstVisibleItemPosition()
+                    val lastVisible = layoutManager.findLastVisibleItemPosition()
+                    if(firstVisible == RecyclerView.NO_POSITION) return
+                    var i = 0
+                    for(index in firstVisible..lastVisible){
+                        val message = adapter.currentList.get(index) ?: continue
+                        if(message.seen == false && message.uid != uid){
+                            i++
+                            chatPageViewModel.updateSeenStatus(message)
+                        }
+                    }
+                    if(i > 0)
+                        chatPageViewModel.updateSeenCount(i)
+                }
             }
+
         })
 
         return binding.root

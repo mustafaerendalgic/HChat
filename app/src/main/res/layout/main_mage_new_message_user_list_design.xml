@@ -80,8 +80,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/howManyUnseenBalloon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             app:shapeAppearanceOverlay="@style/CircularImageViewStyle"
             android:background="@color/primary"
             app:layout_constraintEnd_toEndOf="parent"
