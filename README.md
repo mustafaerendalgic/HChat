@@ -12,7 +12,7 @@ ChatApp is a modern Android messaging application built with industry-standard p
 
 | Login Screen | Chat List | Chat Room | Profile |
 | :---: | :---: | :---: | :---: |
-| <img src="(https://github.com/user-attachments/assets/215fee3a-0a90-48b6-ac1e-12c96458c5ed)" width="200"> | <img src="(https://github.com/user-attachments/assets/3cc7e437-cdd6-4d76-bf71-c2b242315333)" width="200"> | <img src="(https://github.com/user-attachments/assets/10ead6c9-bbdb-459e-8a83-b118f7132ab7)" width="200"> | <img src="(https://github.com/user-attachments/assets/17fa258b-aa87-44a9-8c4e-227ece0d30ff)" width="200"> |
+| <img src="https://github.com/user-attachments/assets/215fee3a-0a90-48b6-ac1e-12c96458c5ed" width="200"> | <img src="https://github.com/user-attachments/assets/3cc7e437-cdd6-4d76-bf71-c2b242315333" width="200"> | <img src="https://github.com/user-attachments/assets/10ead6c9-bbdb-459e-8a83-b118f7132ab7" width="200"> | <img src="https://github.com/user-attachments/assets/17fa258b-aa87-44a9-8c4e-227ece0d30ff" width="200"> |
 
 *(Note: Screenshots will be added as the UI reaches its final version.)*
 
