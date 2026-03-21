@@ -4,7 +4,7 @@
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 ![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)
 
-ChatApp is a modern Android messaging application built with industry-standard practices, including Jetpack Compose and MVVM architecture. It aims to provide seamless real-time communication for users.
+ChatApp is a modern Android messaging application built with industry-standard practices, including XML and MVVM architecture. It aims to provide seamless real-time communication for users.
 
 > ⚠️ **Note:** This project is currently under active development (Work in Progress).
 
