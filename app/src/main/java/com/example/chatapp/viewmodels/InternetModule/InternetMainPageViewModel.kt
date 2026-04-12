@@ -1,31 +1,20 @@
-package com.example.chatapp.viewmodels
+package com.example.chatapp.viewmodels.InternetModule
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
-import com.example.chatapp.data.entity.ChatMessage
 import com.example.chatapp.data.entity.UserListItem
-import com.example.chatapp.util.hasher
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.auth.User
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -34,7 +23,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 @HiltViewModel
-class MainPageViewModel @Inject constructor() : ViewModel() {
+class InternetMainPageViewModel @Inject constructor() : ViewModel() {
 
     private val _userList = MutableLiveData<List<UserListItem>>()
     val userList: LiveData<List<UserListItem>> = _userList

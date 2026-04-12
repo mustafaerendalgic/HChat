@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="64dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/i_unseen_profile_photo"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@color/primary"
+        android:padding="8dp"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/CircularImageViewStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/i_unseen_profile_photo"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <TextView
+            android:id="@+id/i_unseen_username"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="John Doe"
+            android:textStyle="bold"
+            style="@style/primaryTextStyle"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="@id/guide"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/i_unseen_last_message"
+            style="@style/primaryTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="1"
+            android:gravity="left"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingEnd="8dp"
+            android:text="Say hi to John Doe!"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/i_unseen_last_message_date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide" />
+
+
+        <TextView
+            android:id="@+id/i_unseen_last_message_date"
+            style="@style/primaryTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="1.5dp"
+            android:alpha="0.5"
+            android:gravity="center"
+            android:text="13.33"
+            android:textSize="12.5sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/i_how_many_unseen_balloon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:shapeAppearanceOverlay="@style/CircularImageViewStyle"
+            android:background="@color/primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/guide"/>
+
+        <TextView
+            android:id="@+id/i_how_many_unseen_text"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            style="@style/primaryTextStyleOnBackground"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMaxTextSize="11.5sp"
+            android:autoSizeMinTextSize="1sp"
+            app:layout_constraintBottom_toBottomOf="@+id/i_how_many_unseen_balloon"
+            app:layout_constraintStart_toStartOf="@+id/i_how_many_unseen_balloon"
+            app:layout_constraintTop_toTopOf="@id/i_how_many_unseen_balloon"
+            app:layout_constraintEnd_toEndOf="@id/i_how_many_unseen_balloon"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

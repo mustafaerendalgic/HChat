@@ -1,6 +1,5 @@
 package com.example.chatapp.adapters
 
-import android.media.browse.MediaBrowser
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,18 +9,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.chatapp.R
 import com.example.chatapp.data.entity.ChatMessage
 import com.example.chatapp.util.formatDate
-import com.example.chatapp.viewmodels.ChatPageViewModel
+import com.example.chatapp.viewmodels.InternetModule.InternetChatPageViewModel
 import com.google.android.material.imageview.ShapeableImageView
-import com.google.api.Distribution
 import com.google.firebase.firestore.FirebaseFirestore
-import org.w3c.dom.Text
 
 class SenderMessageViewHolder(item: View) : RecyclerView.ViewHolder(item) {
     val senderTimestamp: TextView = item.findViewById(R.id.timestamp)
@@ -36,7 +32,7 @@ class ReceiverMessageViewHolder(item: View) : RecyclerView.ViewHolder(item) {
     val timestamp: TextView = item.findViewById(R.id.timestampReceiver)
 }
 
-class ChatMessageAdapter(private val uid: String, private val rv: RecyclerView, private val chatPageViewModel: ChatPageViewModel): ListAdapter<ChatMessage, RecyclerView.ViewHolder>(DiffCallbackForChat()){
+class ChatMessageAdapter(private val uid: String, private val rv: RecyclerView, private val internetChatPageViewModel: InternetChatPageViewModel): ListAdapter<ChatMessage, RecyclerView.ViewHolder>(DiffCallbackForChat()){
 
     val RECEIVER_VIEW_TYPE = 0
     val SENDER_VIEW_TYPE = 1

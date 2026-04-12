@@ -1,4 +1,4 @@
-package com.example.chatapp.fragments
+package com.example.chatapp.fragments.InternetModule
 
 import android.os.Bundle
 import android.util.Log
@@ -7,27 +7,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.chatapp.R
 import com.example.chatapp.adapters.UserListAdapter
-import com.example.chatapp.data.entity.UserListItem
-import com.example.chatapp.databinding.FragmentMainPageBinding
-import com.example.chatapp.viewmodels.ChatPageViewModel
-import com.example.chatapp.viewmodels.MainPageViewModel
+import com.example.chatapp.databinding.IFragmentMainPageBinding
+import com.example.chatapp.viewmodels.InternetModule.InternetChatPageViewModel
+import com.example.chatapp.viewmodels.InternetModule.InternetMainPageViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainPage : Fragment() {
+class InternetMainPage : Fragment() {
 
 
-    val chatPageViewModel: ChatPageViewModel by activityViewModels()
+    val internetChatPageViewModel: InternetChatPageViewModel by activityViewModels()
 
-    private lateinit var binding: FragmentMainPageBinding
-    private val mainPageViewModel: MainPageViewModel by activityViewModels()
+    private lateinit var binding: IFragmentMainPageBinding
+    private val internetMainPageViewModel: InternetMainPageViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,16 +34,16 @@ class MainPage : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMainPageBinding.inflate(inflater, container, false)
+        binding = IFragmentMainPageBinding.inflate(inflater, container, false)
 
-        val userListAdapter = UserListAdapter(chatPageViewModel)
+        val userListAdapter = UserListAdapter(internetChatPageViewModel)
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        mainPageViewModel.finalUserList.observe(viewLifecycleOwner) { list ->
+        internetMainPageViewModel.finalUserList.observe(viewLifecycleOwner) { list ->
             userListAdapter.submitList(list)
         }
-        binding.userList.adapter = userListAdapter
-        binding.userList.layoutManager = layoutManager
+        binding.iUserList.adapter = userListAdapter
+        binding.iUserList.layoutManager = layoutManager
 
         binding.button.setOnClickListener {
             Log.d("buton_basildi", "Buton Basıldı")

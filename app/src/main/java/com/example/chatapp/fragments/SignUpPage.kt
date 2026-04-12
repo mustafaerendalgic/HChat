@@ -13,7 +13,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.chatapp.R
 import com.example.chatapp.databinding.FragmentSignUpPageBinding
-import com.example.chatapp.util.hasher
 import com.example.chatapp.viewmodels.SignUpViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth

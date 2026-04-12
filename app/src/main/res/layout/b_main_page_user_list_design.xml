@@ -6,7 +6,7 @@
     android:layout_height="64dp">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profilePhoto"
+        android:id="@+id/b_profile_photo"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:src="@color/primary"
@@ -24,7 +24,7 @@
         android:layout_marginVertical="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profilePhoto"
+        app:layout_constraintStart_toEndOf="@+id/b_profile_photo"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.Guideline
@@ -35,7 +35,7 @@
             app:layout_constraintGuide_percent="0.5" />
 
         <TextView
-            android:id="@+id/username"
+            android:id="@+id/b_username"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="John Doe"
@@ -47,7 +47,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/lastMessage"
+            android:id="@+id/b_last_message"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="Say hi to John Doe!"
@@ -60,20 +60,20 @@
 
 
         <ImageView
-            android:id="@+id/messageSeen"
+            android:id="@+id/b_message_seen"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:paddingVertical="4dp"
             android:layout_marginTop="2.5dp"
             android:layout_marginBottom="-1.5dp"
-            android:visibility="invisible"
+            android:paddingVertical="4dp"
             android:src="@drawable/outline_arrows_more_up_24"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/guide"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guide" />
 
         <TextView
-            android:id="@+id/lastMessageDate"
+            android:id="@+id/b_last_message_date"
             style="@style/primaryTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -83,7 +83,7 @@
             android:textSize="12.5sp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/messageSeen"
+            app:layout_constraintEnd_toStartOf="@id/b_message_seen"
             app:layout_constraintTop_toBottomOf="@id/guide" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

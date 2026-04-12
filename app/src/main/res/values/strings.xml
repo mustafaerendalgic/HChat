@@ -18,17 +18,17 @@
 
         <string name="hello_blank_fragment">Hello blank fragment</string>-->
 
-        <string name="forgot_password">Forgot my password</string>
-        <string name="create_account">Create one</string>
-        <string name="create_account_head">Dont have an account?</string>
-        <string name="login">Log in</string>
-        <string name="signUp">Sign up</string>
-        <string name="eMail">E-mail</string>
-        <string name="password">Password</string>
-        <string name="nicknamesBlank">Names can not have spaces</string>
-        <string name="nickNameIsUsed">Nickname is already in use</string>
-        <string name="emailIsUsed">E-mail is already in use</string>
-        <string name="putProfilePicture">Please upload a profile picture</string>
-        <string name="isBlank">Please make sure you filled all the fields</string>
+    <string name="forgot_password">Forgot my password</string>
+    <string name="create_account">Create one</string>
+    <string name="create_account_head">Dont have an account?</string>
+    <string name="login">Log in</string>
+    <string name="signUp">Sign up</string>
+    <string name="eMail">E-mail</string>
+    <string name="password">Password</string>
+    <string name="nicknamesBlank">Names can not have spaces</string>
+    <string name="nickNameIsUsed">Nickname is already in use</string>
+    <string name="emailIsUsed">E-mail is already in use</string>
+    <string name="putProfilePicture">Please upload a profile picture</string>
+    <string name="isBlank">Please make sure you filled all the fields</string>
 
-    </resources>
+</resources>

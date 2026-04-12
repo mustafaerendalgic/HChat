@@ -1,21 +1,18 @@
 package com.example.chatapp.adapters
 
-import android.media.Image
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.chatapp.R
 import com.example.chatapp.data.entity.UserListItem
-import com.example.chatapp.viewmodels.ChatPageViewModel
+import com.example.chatapp.viewmodels.InternetModule.InternetChatPageViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 class seenUserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
@@ -25,11 +22,11 @@ class seenUserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
     val messageStatus: ImageView
     val lastMessageDate: TextView
     init {
-        profilePicture = item.findViewById<ImageView>(R.id.profilePhoto)
-        nickname = item.findViewById<TextView>(R.id.username)
-        lastMessage = item.findViewById<TextView>(R.id.lastMessage)
-        messageStatus = item.findViewById<ImageView>(R.id.messageSeen)
-        lastMessageDate = item.findViewById<TextView>(R.id.lastMessageDate)
+        profilePicture = item.findViewById<ImageView>(R.id.i_profile_photo)
+        nickname = item.findViewById<TextView>(R.id.i_username)
+        lastMessage = item.findViewById<TextView>(R.id.i_last_message)
+        messageStatus = item.findViewById<ImageView>(R.id.i_message_seen)
+        lastMessageDate = item.findViewById<TextView>(R.id.i_last_message_date)
     }
 
 }
@@ -42,17 +39,17 @@ class unseenUserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
     val howManyText: TextView
     val howManyBalloon: ImageView
     init {
-        profilePicture = item.findViewById<ImageView>(R.id.unseen_profilePhoto)
-        nickname = item.findViewById<TextView>(R.id.unseen_username)
-        lastMessage = item.findViewById<TextView>(R.id.unseen_lastMessage)
-        lastMessageDate = item.findViewById<TextView>(R.id.unseen_lastMessageDate)
-        howManyText = item.findViewById<TextView>(R.id.howManyUnseenText)
-        howManyBalloon = item.findViewById<ImageView>(R.id.howManyUnseenBalloon)
+        profilePicture = item.findViewById<ImageView>(R.id.i_unseen_profile_photo)
+        nickname = item.findViewById<TextView>(R.id.i_unseen_username)
+        lastMessage = item.findViewById<TextView>(R.id.i_unseen_last_message)
+        lastMessageDate = item.findViewById<TextView>(R.id.i_unseen_last_message_date)
+        howManyText = item.findViewById<TextView>(R.id.i_how_many_unseen_text)
+        howManyBalloon = item.findViewById<ImageView>(R.id.i_how_many_unseen_balloon)
     }
 
 }
 
-class UserListAdapter(private val chatPageViewModel: ChatPageViewModel) : ListAdapter<UserListItem, RecyclerView.ViewHolder>(DiffCallback()) {
+class UserListAdapter(private val internetChatPageViewModel: InternetChatPageViewModel) : ListAdapter<UserListItem, RecyclerView.ViewHolder>(DiffCallback()) {
     private val UNSEEN = 0
     private val SEEN = 1
     private val uid = FirebaseAuth.getInstance().currentUser?.uid
@@ -71,15 +68,15 @@ class UserListAdapter(private val chatPageViewModel: ChatPageViewModel) : ListAd
     ): RecyclerView.ViewHolder {
         return when(viewType){
             SEEN -> {
-                val v = LayoutInflater.from(parent.context).inflate(R.layout.main_mage_user_list_design, parent, false)
+                val v = LayoutInflater.from(parent.context).inflate(R.layout.i_main_page_user_list_design, parent, false)
                 seenUserListViewHolder(v)
             }
             UNSEEN -> {
-                val v = LayoutInflater.from(parent.context).inflate(R.layout.main_mage_new_message_user_list_design, parent, false)
+                val v = LayoutInflater.from(parent.context).inflate(R.layout.i_main_page_new_message_user_list_design, parent, false)
                 unseenUserListViewHolder(v)
             }
             else -> {
-                val v = LayoutInflater.from(parent.context).inflate(R.layout.main_mage_user_list_design, parent, false)
+                val v = LayoutInflater.from(parent.context).inflate(R.layout.i_main_page_user_list_design, parent, false)
                 seenUserListViewHolder(v)
             }
         }
@@ -97,7 +94,6 @@ class UserListAdapter(private val chatPageViewModel: ChatPageViewModel) : ListAd
             SEEN -> {
                 holder as seenUserListViewHolder
                 Glide.with(holder.itemView.context).load(item.profilePicture).error(R.drawable.outline_photo_camera_24).into(holder.profilePicture)
-
                 if(item.lastMessage == null){
                     holder.lastMessage.text =  "Say hi to ${item.nick}!"
                 }
@@ -112,29 +108,21 @@ class UserListAdapter(private val chatPageViewModel: ChatPageViewModel) : ListAd
                     }
                     holder.lastMessageDate.text = item.lastMessageDate
                 }
-
                 holder.nickname.text = if(uid != item.uid)item.nick else item.nick + " (You)"
-
                 holder.itemView.setOnClickListener {
-                    chatPageViewModel.setTheUserToChat(item)
+                    internetChatPageViewModel.setTheUserToChat(item)
                     Navigation.findNavController(it).navigate(R.id.mainToChat)
                 }
             }
             UNSEEN -> {
                 holder as unseenUserListViewHolder
-
                 Glide.with(holder.itemView.context).load(item.profilePicture).error(R.drawable.outline_photo_camera_24).into(holder.profilePicture)
-
                 holder.howManyText.text = item.howManyUnseenMessage.toString()
-
                 holder.lastMessage.text = item.lastMessage
-
                 holder.lastMessageDate.text = item.lastMessageDate
-
                 holder.nickname.text = if(uid != item.uid)item.nick else item.nick + " (You)"
-
                 holder.itemView.setOnClickListener {
-                    chatPageViewModel.setTheUserToChat(item)
+                    internetChatPageViewModel.setTheUserToChat(item)
                     Navigation.findNavController(it).navigate(R.id.mainToChat)
                 }
 

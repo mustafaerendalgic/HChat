@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.MainPage"
-    android:background="@color/primary">
-
+    tools:context=".fragments.BluetoothModule.BluetoothMainPage"
+    android:background="@color/b_primary">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/topAppBar"
         android:layout_width="0dp"
         android:layout_height="64dp"
-        app:cardBackgroundColor="@color/primary"
+        app:cardBackgroundColor="@color/b_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -27,31 +26,31 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:gravity="center"
-                android:text="Ichat"
-                android:textStyle="bold"
+                android:text="Bchat"
                 android:textSize="20dp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/menu"
+                android:id="@+id/b_menu"
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/outline_menu_24"
                 android:padding="11dp"
+                android:src="@drawable/outline_menu_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/userSearch"
+                android:id="@+id/b_user_search"
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/baseline_search_24"
                 android:padding="11dp"
+                android:src="@drawable/baseline_search_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/menu"
+                app:layout_constraintEnd_toStartOf="@id/b_menu"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -77,7 +76,7 @@
             android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/userList"
+                android:id="@+id/b_user_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"

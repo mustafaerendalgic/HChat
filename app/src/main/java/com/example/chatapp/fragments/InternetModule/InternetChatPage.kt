@@ -1,4 +1,4 @@
-package com.example.chatapp.fragments
+package com.example.chatapp.fragments.InternetModule
 
 import android.os.Bundle
 import android.util.Log
@@ -6,27 +6,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.chatapp.R
 import com.example.chatapp.adapters.ChatMessageAdapter
-import com.example.chatapp.data.entity.UserListItem
-import com.example.chatapp.databinding.FragmentChatPageBinding
-import com.example.chatapp.viewmodels.ChatPageViewModel
+import com.example.chatapp.databinding.IFragmentChatPageBinding
+import com.example.chatapp.viewmodels.InternetModule.InternetChatPageViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ChatPage : Fragment() {
+class InternetChatPage : Fragment() {
 
-    private lateinit var binding: FragmentChatPageBinding
-    val chatPageViewModel: ChatPageViewModel by activityViewModels()
+    private lateinit var binding: IFragmentChatPageBinding
+    val internetChatPageViewModel: InternetChatPageViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,35 +32,35 @@ class ChatPage : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentChatPageBinding.inflate(inflater, container, false)
+        binding = IFragmentChatPageBinding.inflate(inflater, container, false)
         val uid = FirebaseAuth.getInstance().currentUser!!.uid
 
-        chatPageViewModel.theUserToChat.observe(viewLifecycleOwner) { user ->
-            chatPageViewModel.startChatListener(user)
-            binding.chattingUserNick.text = user.nick
-            Glide.with(requireContext()).load(user.profilePicture).error(R.drawable.outline_photo_camera_24).into(binding.chatProfilePicture)
+        internetChatPageViewModel.theUserToChat.observe(viewLifecycleOwner) { user ->
+            internetChatPageViewModel.startChatListener(user)
+            binding.iChattingUserNick.text = user.nick
+            Glide.with(requireContext()).load(user.profilePicture).error(R.drawable.outline_photo_camera_24).into(binding.iChatProfilePicture)
             Log.d("profile_pic", user.profilePicture!!)
         }
 
-        binding.sendMessageButton.setOnClickListener {
-            Log.d("chatMesaj", binding.sendMessageTextField.text.toString())
-            chatPageViewModel.addMessageToChat(binding.sendMessageTextField.text.toString())
+        binding.iSendMessageButton.setOnClickListener {
+            Log.d("chatMesaj", binding.iSendMessageTextField.text.toString())
+            internetChatPageViewModel.addMessageToChat(binding.iSendMessageTextField.text.toString())
         }
 
-        val adapter = ChatMessageAdapter(uid, binding.chatMessageRV, chatPageViewModel)
+        val adapter = ChatMessageAdapter(uid, binding.iChatMessageRV, internetChatPageViewModel)
 
-        chatPageViewModel.chat.observe(viewLifecycleOwner) {
+        internetChatPageViewModel.chat.observe(viewLifecycleOwner) {
             Log.d("listeee", it.toString())
             val lastMessage = it.lastOrNull()
             Log.d("lastMessage", lastMessage.toString())
             if(lastMessage != null && !lastMessage.seen && lastMessage.uid != uid) {
-                chatPageViewModel.updateSeenStatus(lastMessage)
-                chatPageViewModel.updateSeenCount(1)
+                internetChatPageViewModel.updateSeenStatus(lastMessage)
+                internetChatPageViewModel.updateSeenCount(1)
             }
             adapter.submitList(it)
-            binding.chatMessageRV.post {
+            binding.iChatMessageRV.post {
                 try {
-                    binding.chatMessageRV.smoothScrollToPosition(it.size - 1)
+                    binding.iChatMessageRV.smoothScrollToPosition(it.size - 1)
                 }
                 catch (e: Exception){
                     print(e)
@@ -75,10 +70,10 @@ class ChatPage : Fragment() {
         }
 
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.chatMessageRV.adapter = adapter
-        binding.chatMessageRV.layoutManager = layoutManager
+        binding.iChatMessageRV.adapter = adapter
+        binding.iChatMessageRV.layoutManager = layoutManager
 
-        binding.chatMessageRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.iChatMessageRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
 
@@ -91,11 +86,11 @@ class ChatPage : Fragment() {
                         val message = adapter.currentList.get(index) ?: continue
                         if(message.seen == false && message.uid != uid){
                             i++
-                            chatPageViewModel.updateSeenStatus(message)
+                            internetChatPageViewModel.updateSeenStatus(message)
                         }
                     }
                     if(i > 0)
-                        chatPageViewModel.updateSeenCount(i)
+                        internetChatPageViewModel.updateSeenCount(i)
                 }
             }
 
@@ -106,7 +101,7 @@ class ChatPage : Fragment() {
     }
 
     override fun onDestroy() {
-        chatPageViewModel.clearMessages()
+        internetChatPageViewModel.clearMessages()
         super.onDestroy()
     }
 

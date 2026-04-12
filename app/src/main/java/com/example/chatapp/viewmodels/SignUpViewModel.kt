@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.chatapp.R
-import com.example.chatapp.util.hasher
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions

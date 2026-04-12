@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/mainPage"
-        android:name="com.example.chatapp.fragments.MainPage"
+        android:name="com.example.chatapp.fragments.InternetModule.InternetMainPage"
         android:label="fragment_main_page"
-        tools:layout="@layout/fragment_main_page" >
+        tools:layout="@layout/i_fragment_main_page" >
         <action
             android:id="@+id/mainToChat"
             app:destination="@id/chatPage" />
@@ -33,9 +33,9 @@
     </fragment>
     <fragment
         android:id="@+id/chatPage"
-        android:name="com.example.chatapp.fragments.ChatPage"
+        android:name="com.example.chatapp.fragments.InternetModule.InternetChatPage"
         android:label="fragment_chat_page"
-        tools:layout="@layout/fragment_chat_page" >
+        tools:layout="@layout/i_fragment_chat_page" >
         <action
             android:id="@+id/chatToMain"
             app:destination="@id/mainPage" />

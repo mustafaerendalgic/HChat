@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".fragments.ChatPage">
+    tools:context=".fragments.InternetModule.InternetChatPage">
 
 
         <androidx.cardview.widget.CardView
@@ -23,7 +23,7 @@
                 android:layout_height="match_parent">
 
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/chatProfilePicture"
+                    android:id="@+id/i_chatProfilePicture"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="12dp"
@@ -36,7 +36,7 @@
                     app:shapeAppearanceOverlay="@style/CircularImageViewStyle" />
 
                 <TextView
-                    android:id="@+id/chattingUserNick"
+                    android:id="@+id/i_chattingUserNick"
                     style="@style/primaryTextStyleOnBackground"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -45,9 +45,9 @@
                     android:text="John Doe"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/chatProfilePicture"
-                    app:layout_constraintStart_toEndOf="@id/chatProfilePicture"
-                    app:layout_constraintTop_toTopOf="@id/chatProfilePicture" />
+                    app:layout_constraintBottom_toBottomOf="@id/i_chatProfilePicture"
+                    app:layout_constraintStart_toEndOf="@id/i_chatProfilePicture"
+                    app:layout_constraintTop_toTopOf="@id/i_chatProfilePicture" />
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:layout_width="32dp"
@@ -72,23 +72,23 @@
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/chatMessageRV">
+            app:layout_constraintTop_toTopOf="@id/i_chatMessageRV">
 
         </androidx.cardview.widget.CardView>
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/chatMessageRV"
+            android:id="@+id/i_chatMessageRV"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/sendMessageCard"
+            app:layout_constraintBottom_toTopOf="@+id/i_sendMessageCard"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/topAppBarForChat" />
 
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/sendMessageCard"
+            android:id="@+id/i_sendMessageCard"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
@@ -98,13 +98,13 @@
             app:cardBackgroundColor="@color/gray"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/sendMessageButton"
-            app:layout_constraintEnd_toStartOf="@+id/sendMessageButton"
+            app:layout_constraintBottom_toBottomOf="@id/i_sendMessageButton"
+            app:layout_constraintEnd_toStartOf="@+id/i_sendMessageButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/sendMessageButton">
+            app:layout_constraintTop_toTopOf="@id/i_sendMessageButton">
 
             <EditText
-                android:id="@+id/sendMessageTextField"
+                android:id="@+id/i_sendMessageTextField"
                 style="@style/primaryTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -115,7 +115,7 @@
         </androidx.cardview.widget.CardView>
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/sendMessageButton"
+            android:id="@+id/i_sendMessageButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="12dp"

@@ -11,16 +11,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.fragment.findNavController
 import com.example.chatapp.R
 import com.example.chatapp.databinding.FragmentLoginPageBinding
-import com.example.chatapp.util.hasher
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginPage : Fragment() { // Fragment'ı bu şekilde tanımlayın
+class LoginPage : Fragment() {
 
-    private lateinit var binding: FragmentLoginPageBinding // lateinit burada kalabilir
+    private lateinit var binding: FragmentLoginPageBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

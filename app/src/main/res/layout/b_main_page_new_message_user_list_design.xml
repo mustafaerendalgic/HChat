@@ -6,16 +6,16 @@
     android:layout_height="64dp">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/unseen_profilePhoto"
+        android:id="@+id/b_unseen_profile_photo"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:src="@color/primary"
         android:padding="8dp"
         android:scaleType="centerCrop"
-        app:shapeAppearanceOverlay="@style/CircularImageViewStyle"
+        android:src="@color/b_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/CircularImageViewStyle" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
@@ -24,7 +24,7 @@
         android:layout_marginVertical="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/unseen_profilePhoto"
+        app:layout_constraintStart_toEndOf="@+id/b_unseen_profile_photo"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.Guideline
@@ -35,7 +35,7 @@
             app:layout_constraintGuide_percent="0.5" />
 
         <TextView
-            android:id="@+id/unseen_username"
+            android:id="@+id/b_unseen_username"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="John Doe"
@@ -47,7 +47,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/unseen_lastMessage"
+            android:id="@+id/b_unseen_lastMessage"
             style="@style/primaryTextStyle"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -59,13 +59,13 @@
             android:text="Say hi to John Doe!"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/unseen_lastMessageDate"
+            app:layout_constraintEnd_toStartOf="@+id/b_unseen_lastMessageDate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide" />
 
 
         <TextView
-            android:id="@+id/unseen_lastMessageDate"
+            android:id="@+id/b_unseen_lastMessageDate"
             style="@style/primaryTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -79,17 +79,17 @@
             app:layout_constraintTop_toBottomOf="@id/guide" />
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/howManyUnseenBalloon"
+            android:id="@+id/b_how_many_unseen_balloon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            app:shapeAppearanceOverlay="@style/CircularImageViewStyle"
-            android:background="@color/primary"
+            android:background="@color/b_primary"
+            app:layout_constraintBottom_toTopOf="@id/guide"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/guide"/>
+            app:shapeAppearanceOverlay="@style/CircularImageViewStyle" />
 
         <TextView
-            android:id="@+id/howManyUnseenText"
+            android:id="@+id/b_how_many_unseen_text"
             android:layout_width="0dp"
             android:layout_height="0dp"
             style="@style/primaryTextStyleOnBackground"
@@ -99,10 +99,10 @@
             android:autoSizeTextType="uniform"
             android:autoSizeMaxTextSize="11.5sp"
             android:autoSizeMinTextSize="1sp"
-            app:layout_constraintBottom_toBottomOf="@+id/howManyUnseenBalloon"
-            app:layout_constraintStart_toStartOf="@+id/howManyUnseenBalloon"
-            app:layout_constraintTop_toTopOf="@id/howManyUnseenBalloon"
-            app:layout_constraintEnd_toEndOf="@id/howManyUnseenBalloon"/>
+            app:layout_constraintBottom_toBottomOf="@+id/b_how_many_unseen_balloon"
+            app:layout_constraintStart_toStartOf="@+id/b_how_many_unseen_balloon"
+            app:layout_constraintTop_toTopOf="@id/b_how_many_unseen_balloon"
+            app:layout_constraintEnd_toEndOf="@id/b_how_many_unseen_balloon"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
