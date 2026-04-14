@@ -1,4 +1,4 @@
-package com.example.chatapp.fragments
+package com.example.chatapp.fragments.internet
 
 import android.net.Uri
 import android.os.Bundle
@@ -14,10 +14,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.chatapp.R
 import com.example.chatapp.databinding.FragmentSignUpPageBinding
 import com.example.chatapp.viewmodels.SignUpViewModel
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

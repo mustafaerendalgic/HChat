@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".fragments.BluetoothModule.BluetoothChatPage">
+    tools:context=".fragments.bluetooth.BluetoothChatPage">
 
 
     <androidx.cardview.widget.CardView

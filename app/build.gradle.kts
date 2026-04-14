@@ -77,5 +77,9 @@ dependencies {
 
     implementation(libs.firebase.storage)
 
+    implementation("com.airbnb.android:lottie:6.7.1")
+
+    implementation("androidx.datastore:datastore-preferences:1.2.1")
+
 }
 apply(plugin = "com.google.gms.google-services")

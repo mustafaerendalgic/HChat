@@ -32,7 +32,7 @@ class ReceiverMessageViewHolder(item: View) : RecyclerView.ViewHolder(item) {
     val timestamp: TextView = item.findViewById(R.id.timestampReceiver)
 }
 
-class ChatMessageAdapter(private val uid: String, private val rv: RecyclerView, private val internetChatPageViewModel: InternetChatPageViewModel): ListAdapter<ChatMessage, RecyclerView.ViewHolder>(DiffCallbackForChat()){
+class ChatMessageAdapter(private val uid: String): ListAdapter<ChatMessage, RecyclerView.ViewHolder>(DiffCallbackForChat()){
 
     val RECEIVER_VIEW_TYPE = 0
     val SENDER_VIEW_TYPE = 1

@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navres"
-    app:startDestination="@id/loginPage">
+    app:startDestination="@id/mainMenu">
 
     <fragment
         android:id="@+id/mainPage"
-        android:name="com.example.chatapp.fragments.InternetModule.InternetMainPage"
+        android:name="com.example.chatapp.fragments.internet.InternetMainPage"
         android:label="fragment_main_page"
         tools:layout="@layout/i_fragment_main_page" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginPage"
-        android:name="com.example.chatapp.fragments.LoginPage"
+        android:name="com.example.chatapp.fragments.internet.LoginPage"
         android:label="fragment_login_page"
         tools:layout="@layout/fragment_login_page" >
         <action
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/chatPage"
-        android:name="com.example.chatapp.fragments.InternetModule.InternetChatPage"
+        android:name="com.example.chatapp.fragments.internet.InternetChatPage"
         android:label="fragment_chat_page"
         tools:layout="@layout/i_fragment_chat_page" >
         <action
@@ -45,7 +45,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpPage"
-        android:name="com.example.chatapp.fragments.SignUpPage"
+        android:name="com.example.chatapp.fragments.internet.SignUpPage"
         android:label="fragment_sign_up_page"
         tools:layout="@layout/fragment_sign_up_page" >
         <action
@@ -57,4 +57,30 @@
             android:id="@+id/signToMain"
             app:destination="@id/mainPage" />
     </fragment>
+    <fragment
+        android:id="@+id/mainMenu"
+        android:name="com.example.chatapp.fragments.main.MainMenu"
+        android:label="fragment_main_menu"
+        tools:layout="@layout/fragment_main_menu" >
+        <action
+            android:id="@+id/main_to_i"
+            app:destination="@id/loginPage" />
+        <action
+            android:id="@+id/main_to_b"
+            app:destination="@id/bluetoothMainPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/bluetoothMainPage"
+        android:name="com.example.chatapp.fragments.bluetooth.BluetoothMainPage"
+        android:label="b_fragment_main_page"
+        tools:layout="@layout/b_fragment_main_page" >
+        <action
+            android:id="@+id/b_main_to_chat"
+            app:destination="@id/bluetoothChatPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/bluetoothChatPage"
+        android:name="com.example.chatapp.fragments.bluetooth.BluetoothChatPage"
+        android:label="b_fragment_chat_page"
+        tools:layout="@layout/b_fragment_chat_page" />
 </navigation>

@@ -26,7 +26,6 @@ import java.util.Locale
 class InternetMainPageViewModel @Inject constructor() : ViewModel() {
 
     private val _userList = MutableLiveData<List<UserListItem>>()
-    val userList: LiveData<List<UserListItem>> = _userList
 
     private val _uid = FirebaseAuth.getInstance().currentUser?.uid
 

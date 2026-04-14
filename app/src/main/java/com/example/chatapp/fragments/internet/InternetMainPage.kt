@@ -1,4 +1,4 @@
-package com.example.chatapp.fragments.InternetModule
+package com.example.chatapp.fragments.internet
 
 import android.os.Bundle
 import android.util.Log

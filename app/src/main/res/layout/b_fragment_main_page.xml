@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.BluetoothModule.BluetoothMainPage"
+    tools:context=".fragments.bluetooth.BluetoothMainPage"
     android:background="@color/b_primary">
 
     <androidx.cardview.widget.CardView
@@ -58,6 +58,8 @@
 
     </androidx.cardview.widget.CardView>
 
+
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -74,6 +76,39 @@
             android:layout_width="match_parent"
             android:paddingBottom="12dp"
             android:layout_height="match_parent">
+            
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/ekranın_yarisi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintGuide_percent="0.5"
+                android:orientation="horizontal"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/ask_for_permission_again_animation"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/ekranın_yarisi"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/hello_animation" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/request_permissions_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/b_module_button_background"
+                android:padding="16dp"
+                android:text="Request Permissions"
+                android:textColor="@color/white"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/ekranın_yarisi" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/b_user_list"
@@ -85,19 +120,12 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" >
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Button"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+            </androidx.recyclerview.widget.RecyclerView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
