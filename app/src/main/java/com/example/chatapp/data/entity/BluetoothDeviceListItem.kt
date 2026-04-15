@@ -2,14 +2,15 @@ package com.example.chatapp.data.entity
 
 import android.net.MacAddress
 import android.net.Uri
+import android.os.ParcelUuid
 import android.service.controls.DeviceTypes
+import java.util.UUID
 
 data class BluetoothDeviceListItem(
     val deviceName: String = "undefined_device_name",
-    val macAddress: MacAddress,
-    val deviceType: DeviceTypes,
-    val supportedBluetoothProfiles: ArrayList<String>,
-    val listOfUUIDs: ArrayList<String>,
+    val macAddress: String,
+    val deviceType: Int,
+    val listOfUUIDs: Array<ParcelUuid>,
     val lastMessage: String? = null,
     val lastMessageDate: String,
     val lastMessageStatus: Int,

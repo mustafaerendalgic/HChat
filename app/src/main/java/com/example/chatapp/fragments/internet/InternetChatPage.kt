@@ -47,7 +47,7 @@ class InternetChatPage : Fragment() {
             internetChatPageViewModel.addMessageToChat(binding.iSendMessageTextField.text.toString())
         }
 
-        val adapter = ChatMessageAdapter(uid, binding.iChatMessageRV, internetChatPageViewModel)
+        val adapter = ChatMessageAdapter(uid)
 
         internetChatPageViewModel.chat.observe(viewLifecycleOwner) {
             Log.d("listeee", it.toString())

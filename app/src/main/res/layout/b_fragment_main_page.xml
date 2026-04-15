@@ -59,14 +59,12 @@
     </androidx.cardview.widget.CardView>
 
 
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="visible"
+        android:layout_marginBottom="-12dp"
         app:cardBackgroundColor="@color/background"
         app:cardCornerRadius="12dp"
-        android:layout_marginBottom="-12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,21 +72,20 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:paddingBottom="12dp"
-            android:layout_height="match_parent">
-            
+            android:layout_height="match_parent"
+            android:paddingBottom="12dp">
+
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/ekranın_yarisi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintGuide_percent="0.5"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/ask_for_permission_again_animation"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@id/ekranın_yarisi"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -105,22 +102,78 @@
                 android:padding="16dp"
                 android:text="Request Permissions"
                 android:textColor="@color/white"
-                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/ekranın_yarisi" />
 
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/scan_devices_button"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:padding="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/radarblue" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/start_scan_decoration"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:background="@color/white"
+                android:padding="16dp"
+                app:layout_constraintBottom_toBottomOf="@id/scan_devices_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/scan_devices_button"
+                app:shapeAppearanceOverlay="@style/CircularImageViewStyle" />
+
+            <TextView
+                android:id="@+id/start_scan_text"
+                style="@style/primaryTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Scan"
+                android:textColor="@color/b_primary"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/scan_devices_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/scan_devices_button" />
+
+            <ImageView
+                android:id="@+id/original_progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginHorizontal="16dp"
+                android:background="@drawable/scan_line"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/scan_devices_button" />
+
+            <ImageView
+                android:id="@+id/bar_to_move"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/scan_devices_button" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/b_user_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" >
+                app:layout_constraintTop_toBottomOf="@id/original_progress_bar">
 
             </androidx.recyclerview.widget.RecyclerView>
 
