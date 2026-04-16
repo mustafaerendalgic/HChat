@@ -32,6 +32,7 @@ import com.example.chatapp.util.fetchTheAnswer
 import com.example.chatapp.util.howManyRefused
 import com.example.chatapp.util.saveTheAnswer
 import android.os.Build
+import androidx.annotation.RequiresPermission
 
 
 class BluetoothMainPage : Fragment() {
@@ -44,7 +45,7 @@ class BluetoothMainPage : Fragment() {
     private val SEEN_DIALOGUE_REFUSE = ObjectConstants.SEEN_DIALOGUE_REFUSE
     private val SEEN_DIALOGUE_ACCEPT = ObjectConstants.SEEN_DIALOGUE_ACCEPT
 
-    private val permissions = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)arrayOf(
+    private val permissions = if(!isAndroid11OrLower())arrayOf(
         Manifest.permission.BLUETOOTH_SCAN,
         Manifest.permission.BLUETOOTH_CONNECT,
     )
@@ -80,7 +81,7 @@ class BluetoothMainPage : Fragment() {
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
                     Log.d("scan_results_check", "Permissions are not granted, checking permission and returning")
-                    checkPermission(permissions, requireContext())
+                    checkPermission(permissions)
                     return
                 }
                 else{
@@ -110,7 +111,7 @@ class BluetoothMainPage : Fragment() {
         }
         else{
             Log.d("permission_check", "all are granted, proceeding to ")
-            if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.S){
+            if(isAndroid11OrLower()){
                 handleBackgroundLocPermission()
             }
             else
@@ -128,12 +129,11 @@ class BluetoothMainPage : Fragment() {
     }
 
     fun handleBackgroundLocPermission(){
-        requestBackgroundLocationPermissionLauncher.launch(requireContext().checkSelfPermission(
-            Manifest.permission.ACCESS_BACKGROUND_LOCATION).toString())
+        requestBackgroundLocationPermissionLauncher.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
     }
 
     private val permissionNavigationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        checkPermission(permissions, requireContext())
+        checkPermission(permissions)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -159,14 +159,14 @@ class BluetoothMainPage : Fragment() {
         when(answer){
             NOT_SEEN_DIALOGUE -> {
                 Log.d("answer_check", "answer is $answer")
-                checkPermission(permissions, requireContext())
+                checkPermission(permissions)
             }
             SEEN_DIALOGUE_ACCEPT -> {
-                checkPermission(permissions, requireContext())
+                checkPermission(permissions)
                 hideButtons()
             }
             SEEN_DIALOGUE_REFUSE -> {
-                checkPermission(permissions, requireContext())
+                checkPermission(permissions)
                 displayButtons()
             }
         }
@@ -175,7 +175,7 @@ class BluetoothMainPage : Fragment() {
             val dontAskAgain = fetchTheAnswer(DONT_ASK_AGAIN_KEY, requireContext())
             Log.d("answer_check", "button clicked $dontAskAgain")
             if(dontAskAgain < 2)
-                checkPermission(permissions, requireContext())
+                checkPermission(permissions)
             else{
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                 val uri = Uri.fromParts("package", requireContext().packageName, null)
@@ -196,7 +196,7 @@ class BluetoothMainPage : Fragment() {
             Log.d("scan_results_check", "The fragment is attached, initiating")
             val animation = binding.scanDevicesButton
             val progressBar = binding.barToMove
-            if(!isAnyPermissionDenied() || checkBackgroundLocationPermission()){
+            if(!areAllPermissionsGranted()){
                 Toast.makeText(requireContext(), "This operation can not be launched since the required permissions are not granted.",
                     Toast.LENGTH_SHORT).show()
                 Log.d("scan_results_check", "Permissions are not granted, returning")
@@ -232,21 +232,13 @@ class BluetoothMainPage : Fragment() {
         Log.d("permission_check_in_func", "all are defined, $bluetoothManager $bluetoothAdapter $bluetoothLeScanner")
     }
 
-    fun checkPermission(list: Array<String>, context: Context){
-        val listTemp = ArrayList<String>()
-        list.forEach { permission ->
-            Log.d("permission_check_in_func", permission.toString())
-            if(ContextCompat.checkSelfPermission(context, permission.toString()) == PackageManager.PERMISSION_DENIED) {
-                listTemp.add(permission)
-                Log.d("permission_check_in_func", "Permission wasn't granted, adding to the list: ${permission}, ${list}")
-            }
-        }
-        if(listTemp.isNullOrEmpty() && checkBackgroundLocationPermission()) {
+    fun checkPermission(list: Array<String>){
+        if(areAllPermissionsGranted()) {
             Log.d("permission_check_in_func", "all permissions are granted")
             postSuccessfulPermissionRequestSchedule()
         }
         else
-            requestPermissionLauncher.launch(listTemp.toTypedArray())
+            requestPermissionLauncher.launch(list)
     }
 
     fun handlePostRequest(context: Context){
@@ -289,6 +281,19 @@ class BluetoothMainPage : Fragment() {
 
     fun isAnyPermissionDenied(): Boolean{
         return permissions.any { permission -> requireContext().checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED }
+    }
+
+    fun areAllPermissionsGranted() : Boolean{
+        if(!isAndroid11OrLower()){
+            return !isAnyPermissionDenied()
+        }
+        else{
+            return !isAnyPermissionDenied() && checkBackgroundLocationPermission()
+        }
+    }
+
+    fun isAndroid11OrLower(): Boolean{
+        return Build.VERSION.SDK_INT <= 30
     }
 
     fun savePermissionsAsAccepted(){
