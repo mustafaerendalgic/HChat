@@ -1,5 +1,7 @@
 package com.example.chatapp.adapters
 
+import android.bluetooth.BluetoothClass
+import android.content.Context
 import android.media.Image
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,13 +21,13 @@ class bltSeenUserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
     val nickname: TextView
     val lastMessage: TextView
     val lastMessageDate: TextView
-    val lastMessageStatus: ImageView
+    val deviceIcon: ImageView
     init {
         profilePicture = item.findViewById<ImageView>(R.id.b_profile_photo)
         nickname = item.findViewById<TextView>(R.id.b_username)
         lastMessage = item.findViewById<TextView>(R.id.b_last_message)
         lastMessageDate = item.findViewById<TextView>(R.id.b_last_message_date)
-        lastMessageStatus = item.findViewById<ImageView>(R.id.b_message_seen)
+        deviceIcon = item.findViewById<ImageView>(R.id.b_device_icon)
     }
 }
 
@@ -36,6 +38,7 @@ class bltUnseenUserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
     val lastMessageDate: TextView
     val howManyText: TextView
     val howManyBalloon: ImageView
+    val deviceIcon: ImageView
     init {
         profilePicture = item.findViewById<ImageView>(R.id.b_unseen_profile_photo)
         nickname = item.findViewById<TextView>(R.id.b_unseen_username)
@@ -43,10 +46,11 @@ class bltUnseenUserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
         lastMessageDate = item.findViewById<TextView>(R.id.b_unseen_lastMessageDate)
         howManyText = item.findViewById<TextView>(R.id.b_how_many_unseen_text)
         howManyBalloon = item.findViewById<ImageView>(R.id.b_how_many_unseen_balloon)
+        deviceIcon = item.findViewById<ImageView>(R.id.b_unseen_device_icon)
     }
 }
 
-class BluetoothUserListAdapter() : ListAdapter<BluetoothDeviceListItem, RecyclerView.ViewHolder>(
+class BluetoothUserListAdapter(val context: Context) : ListAdapter<BluetoothDeviceListItem, RecyclerView.ViewHolder>(
     BluetoothDeviceListDiffCallback()
 ) {
 
@@ -54,7 +58,6 @@ class BluetoothUserListAdapter() : ListAdapter<BluetoothDeviceListItem, Recycler
     val UNDELIVERED = 2
     val SEEN_ITEM_VIEW = 1
     val UNSEEN_ITEM_VIEW = 0
-
 
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
@@ -94,31 +97,21 @@ class BluetoothUserListAdapter() : ListAdapter<BluetoothDeviceListItem, Recycler
         }
         else{
             holder as bltSeenUserListViewHolder
-            if(item.lastMessage == null){
-                holder.lastMessage.text = "Say hi to ${item.deviceName}"
-                holder.lastMessageDate.visibility = View.INVISIBLE
-                holder.lastMessageStatus.visibility = View.INVISIBLE
+            if(item.lastMessage.isNullOrEmpty()){
+                holder.lastMessage.text = "Tap to establish a connection"
+                holder.lastMessageDate.visibility = View.GONE
             }
             else{
                 holder.lastMessage.text = item.lastMessage
                 holder.lastMessageDate.visibility = View.VISIBLE
-                holder.lastMessageStatus.visibility = View.VISIBLE
                 holder.lastMessageDate.text = item.lastMessageDate
             }
             holder.nickname.text = item.deviceName
             if(item.profilePicture != null)
                 holder.profilePicture.setImageURI(item.profilePicture)
-            if(item.lastMessageStatus == SEEN_ITEM_VIEW){
-                holder.lastMessageStatus.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context, R.drawable.outline_arrows_more_up_24))
+            if(item.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.COMPUTER){
+                holder.deviceIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.baseline_computer_24))
             }
-            else if (item.lastMessageStatus == UNSEEN_ITEM_VIEW) {
-                holder.lastMessageStatus.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context,R.drawable.arrow_up))
-                Log.d("mesupdate", "created as not seen")
-            }
-            else{
-                holder.lastMessageStatus.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context,R.drawable.baseline_transform_24))
-            }
-
         }
     }
 

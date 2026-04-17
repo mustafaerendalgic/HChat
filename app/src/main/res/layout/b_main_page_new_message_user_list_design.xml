@@ -17,6 +17,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/CircularImageViewStyle" />
 
+    <ImageView
+        android:id="@+id/b_unseen_device_icon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/baseline_smartphone_24"
+        android:padding="18dp"
+        app:layout_constraintStart_toStartOf="@+id/b_unseen_profile_photo"
+        app:layout_constraintEnd_toEndOf="@id/b_unseen_profile_photo"
+        app:layout_constraintTop_toTopOf="@id/b_unseen_profile_photo"
+        app:layout_constraintBottom_toBottomOf="@id/b_unseen_profile_photo"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"

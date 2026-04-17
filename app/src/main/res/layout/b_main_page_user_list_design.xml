@@ -17,6 +17,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/b_device_icon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/baseline_smartphone_24"
+        android:padding="18dp"
+        app:layout_constraintStart_toStartOf="@+id/b_profile_photo"
+        app:layout_constraintEnd_toEndOf="@id/b_profile_photo"
+        app:layout_constraintTop_toTopOf="@id/b_profile_photo"
+        app:layout_constraintBottom_toBottomOf="@id/b_profile_photo"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -59,19 +70,6 @@
             app:layout_constraintTop_toBottomOf="@id/guide" />
 
 
-        <ImageView
-            android:id="@+id/b_message_seen"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginTop="2.5dp"
-            android:layout_marginBottom="-1.5dp"
-            android:paddingVertical="4dp"
-            android:src="@drawable/outline_arrows_more_up_24"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/guide" />
-
         <TextView
             android:id="@+id/b_last_message_date"
             style="@style/primaryTextStyle"
@@ -83,7 +81,7 @@
             android:textSize="12.5sp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/b_message_seen"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
