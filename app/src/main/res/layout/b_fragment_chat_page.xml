@@ -81,8 +81,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/b_chatMessageRV"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/b_sendMessageCard"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topAppBarForChat" />
@@ -105,7 +104,7 @@
         app:layout_constraintTop_toTopOf="@id/b_sendMessageButton">
 
         <EditText
-            android:id="@+id/i_sendMessageTextField"
+            android:id="@+id/b_sendMessageTextField"
             style="@style/primaryTextStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

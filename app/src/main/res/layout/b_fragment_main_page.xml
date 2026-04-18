@@ -86,6 +86,7 @@
                 android:id="@+id/ask_for_permission_again_animation"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@id/ekranın_yarisi"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -102,6 +103,7 @@
                 android:padding="16dp"
                 android:text="Request Permissions"
                 android:textColor="@color/white"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/ekranın_yarisi" />
@@ -109,8 +111,8 @@
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/scan_devices_button"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:padding="16dp"
+                android:layout_height="144dp"
+                android:layout_marginTop="@dimen/item_spacing"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -149,6 +151,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="@dimen/item_spacing"
                 android:background="@drawable/scan_line"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -159,6 +162,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:background="@color/white"
+                android:layout_marginTop="@dimen/item_spacing"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/scan_devices_button" />
@@ -169,23 +173,69 @@
                 android:layout_height="wrap_content"
                 android:text="Paired Devices"
                 android:textStyle="bold"
+                android:textSize="16sp"
                 style="@style/primaryTextStyle"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/item_spacing"
                 app:layout_constraintTop_toTopOf="@id/original_progress_bar"/>
+
+            <ImageView
+                android:id="@+id/divider_paired"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/b_primary_divide"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/paired_devices" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/b_paired_user_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="@dimen/rv_item_spacing"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_paired"/>
+
+            <TextView
+                android:id="@+id/discovering_devices"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Discoverable Devices"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                style="@style/primaryTextStyle"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="@dimen/rv_item_spacing"
+                app:layout_constraintTop_toBottomOf="@id/b_paired_user_list"/>
+
+            <ImageView
+                android:id="@+id/divider_discover"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/b_primary_divide"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/discovering_devices" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/b_user_list"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/rv_item_spacing"
                 android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/paired_devices">
+                app:layout_constraintTop_toBottomOf="@id/divider_discover">
 
             </androidx.recyclerview.widget.RecyclerView>
 

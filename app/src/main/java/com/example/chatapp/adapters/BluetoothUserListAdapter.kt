@@ -50,10 +50,9 @@ class bltUnseenUserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
     }
 }
 
-class BluetoothUserListAdapter(val context: Context) : ListAdapter<BluetoothDeviceListItem, RecyclerView.ViewHolder>(
+class BluetoothUserListAdapter(private val onDeviceClick: (device: BluetoothDeviceListItem) -> Unit) : ListAdapter<BluetoothDeviceListItem, RecyclerView.ViewHolder>(
     BluetoothDeviceListDiffCallback()
 ) {
-
     val DELIVER_ERROR = 3
     val UNDELIVERED = 2
     val SEEN_ITEM_VIEW = 1
@@ -92,8 +91,13 @@ class BluetoothUserListAdapter(val context: Context) : ListAdapter<BluetoothDevi
             holder.lastMessageDate.text = item.lastMessageDate
             holder.nickname.text = item.deviceName
             holder.howManyText.text = item.howManyUnseen.toString()
+            if(item.isConnected)
+                holder.nickname.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.primary))
             if(item.profilePicture != null)
                 holder.profilePicture.setImageURI(item.profilePicture)
+            holder.itemView.setOnClickListener {
+                    onDeviceClick(item)
+            }
         }
         else{
             holder as bltSeenUserListViewHolder
@@ -107,10 +111,15 @@ class BluetoothUserListAdapter(val context: Context) : ListAdapter<BluetoothDevi
                 holder.lastMessageDate.text = item.lastMessageDate
             }
             holder.nickname.text = item.deviceName
+            if(item.isConnected)
+                holder.nickname.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.primary))
             if(item.profilePicture != null)
                 holder.profilePicture.setImageURI(item.profilePicture)
             if(item.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.COMPUTER){
-                holder.deviceIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.baseline_computer_24))
+                holder.deviceIcon.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context, R.drawable.baseline_computer_24))
+            }
+            holder.itemView.setOnClickListener {
+                onDeviceClick(item)
             }
         }
     }
@@ -132,7 +141,7 @@ class BluetoothDeviceListDiffCallback() : DiffUtil.ItemCallback<BluetoothDeviceL
         oldItem: BluetoothDeviceListItem,
         newItem: BluetoothDeviceListItem
     ): Boolean {
-        return if (oldItem.macAddress == newItem.macAddress)
+        return if (oldItem.equals(newItem))
             true
         else
             false

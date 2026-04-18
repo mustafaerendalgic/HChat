@@ -5,18 +5,21 @@ import android.R
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothClass
+import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
+import android.bluetooth.le.BluetoothLeAdvertiser
 import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.provider.Settings
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -25,8 +28,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatapp.adapters.BluetoothUserListAdapter
 import com.example.chatapp.data.entity.BluetoothDeviceListItem
@@ -36,9 +37,14 @@ import com.example.chatapp.util.fetchTheAnswer
 import com.example.chatapp.util.howManyRefused
 import com.example.chatapp.util.saveTheAnswer
 import android.os.Build
-import androidx.annotation.RequiresPermission
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import com.example.chatapp.util.createBluetoothItem
+import com.example.chatapp.viewmodels.BluetoothModule.BluetoothMessagingViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class BluetoothMainPage : Fragment() {
 
     private lateinit var binding: BFragmentMainPageBinding
@@ -61,10 +67,13 @@ class BluetoothMainPage : Fragment() {
             Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
+    private val bluetoothChatViewModel: BluetoothMessagingViewModel by activityViewModels()
 
-    private var bluetoothManager: BluetoothManager? = null
-    private var bluetoothAdapter: BluetoothAdapter? = null
+    @Inject lateinit var bluetoothManager: BluetoothManager
+    @Inject lateinit var bluetoothAdapter: BluetoothAdapter
     private var bluetoothLeScanner: BluetoothLeScanner? = null
+
+    private var bluetoothAdvertisingSet: BluetoothLeAdvertiser? = null
     private var scanning = false
     private val SCAN_DURATION: Long = 10000
     private val CustomLeScanCallback: ScanCallback = object: ScanCallback() {
@@ -75,7 +84,7 @@ class BluetoothMainPage : Fragment() {
 
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             Log.d("scan_results_check", "A result is found: $result")
-            val currentList = bluetoothDeviceListAdapter.currentList
+            val currentList = bluetoothDeviceListAdapter.currentList.toMutableList()
             if(result == null){
                 Log.d("scan_results_check", "result is null, returning")
                 return
@@ -89,10 +98,11 @@ class BluetoothMainPage : Fragment() {
                     return
                 }
                 else{
-                    BluetoothDeviceListItem(deviceName = device.name ?: "undefined", macAddress = device.address, deviceType =  device.type, listOfUUIDs = device.uuids, lastMessageDate = "", lastMessage = "", lastMessageStatus = 1, howManyUnseen = 0, bluetoothClass = device.bluetoothClass)
+                    createBluetoothItem(device)
                 }
                 Log.d("scan_results_check", "Created an item: $item")
-                currentList.add(item)
+                if(!currentList.any { it.macAddress == item.macAddress })
+                    currentList.add(item)
                 Log.d("scan_results_check", "Adding the item to the list: $currentList")
                 bluetoothDeviceListAdapter.submitList(currentList)
                 bluetoothDeviceListAdapter.notifyDataSetChanged()
@@ -109,7 +119,8 @@ class BluetoothMainPage : Fragment() {
         }
     }
 
-    private val bluetoothDeviceListAdapter = BluetoothUserListAdapter(requireContext())
+    private val bluetoothDeviceListAdapter = BluetoothUserListAdapter{device -> handleDeviceClick(device)}
+    private val bluetoothDevicePairedListAdapter = BluetoothUserListAdapter{device -> handleDeviceClick(device)}
 
     @SuppressLint("MissingPermission")
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permissions ->
@@ -152,25 +163,78 @@ class BluetoothMainPage : Fragment() {
         checkPermission(permissions)
     }
 
+    private val receiver = object: BroadcastReceiver(){
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            val intent = p1
+            if(intent == null){
+                Log.d("broadcast_receiver_result", "intent is null, returning")
+                return
+            }
+            else{
+                val action = intent.action
+                if(action == BluetoothDevice.ACTION_FOUND){
+                    val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                    if(device == null){
+                        Log.d("broadcast_receiver_result", "device is null, returning")
+                        return
+                    }
+                    val item = createBluetoothItem(device)
+                    val currentList = bluetoothDeviceListAdapter.currentList.toMutableList()
+                    Log.d("broadcast_receiver_result", "item is $item")
+                    if(!currentList.any { it.macAddress == item.macAddress })
+                        currentList.add(item)
+                    bluetoothDeviceListAdapter.submitList(currentList)
+                    bluetoothDeviceListAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        defineBluetoothVariables()
+        val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+        requireContext().registerReceiver(receiver, filter)
     }
 
     override fun onAttach(context: Context) {
+        defineBluetoothVariables()
         super.onAttach(context)
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val action = BluetoothMainPageDirections.bMainToChat()
+        bluetoothChatViewModel.isConnected.observe(viewLifecycleOwner) { isConncted ->
+            if(isConncted){
+                Toast.makeText(requireContext(), "Connection established successfully", Toast.LENGTH_LONG).show()
+                findNavController().navigate(action)
+                bluetoothChatViewModel.updateIsConnected(false)
+            }
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        defineBluetoothVariables()
         binding = BFragmentMainPageBinding.inflate(inflater)
+
         val answer = fetchTheAnswer(PERM_ANSWER_KEY, requireContext())
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        val pairedLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val devicesRecyclerView = binding.bUserList
+        val pairedDevicesRecyclerView = binding.bPairedUserList
         devicesRecyclerView.layoutManager = layoutManager
+        pairedDevicesRecyclerView.layoutManager = pairedLayoutManager
         devicesRecyclerView.adapter = bluetoothDeviceListAdapter
+        pairedDevicesRecyclerView.adapter = bluetoothDevicePairedListAdapter
+
+        binding.scanDevicesButton.speed = 0.1f
+        binding.scanDevicesButton.playAnimation()
 
         when(answer){
             NOT_SEEN_DIALOGUE -> {
@@ -217,12 +281,15 @@ class BluetoothMainPage : Fragment() {
             if(pairedDevices != null){
                 val filteredList = pairedDevices.filter { it.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.PHONE || it.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.COMPUTER }
                 filteredList.forEach { device ->
-                    val item = BluetoothDeviceListItem(deviceName = device.name ?: "undefined", macAddress = device.address, deviceType =  device.type, listOfUUIDs = device.uuids, lastMessageDate = "", lastMessage = "", lastMessageStatus = 1, howManyUnseen = 0, bluetoothClass = device.bluetoothClass)
+                    val item = createBluetoothItem(device)
                     pairedList.add(item)
                 }
             }
-            if(!pairedList.isNullOrEmpty())
-                bluetoothDeviceListAdapter.submitList(pairedList)
+            if(!pairedList.isNullOrEmpty()){
+                bluetoothDevicePairedListAdapter.submitList(pairedList)
+                bluetoothDevicePairedListAdapter.notifyDataSetChanged()
+            }
+
         }
     }
 
@@ -231,6 +298,7 @@ class BluetoothMainPage : Fragment() {
         if(isAdded){
             Log.d("scan_results_check", "The fragment is attached, initiating")
             val animation = binding.scanDevicesButton
+            animation.speed = 1f
             val progressBar = binding.barToMove
             if(!areAllPermissionsGranted()){
                 Toast.makeText(requireContext(), "This operation can not be launched since the required permissions are not granted.",
@@ -239,25 +307,29 @@ class BluetoothMainPage : Fragment() {
                 return
             }
             else{
+                defineBluetoothVariables()
+                makeDeviceDiscoverable()
+                bluetoothChatViewModel.startServer()
                 val filters = mutableListOf<ScanFilter>()
                 val settings = ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build()
                 Log.d("scan_results_check", "Scanner object: $bluetoothLeScanner")
                 if(!scanning){
                     Log.d("scan_results_check", "Scan will begin")
                     progressBar.x = 0f
-                    animation.progress = 0f
                     if(!animation.isAnimating){
                         animation.playAnimation()
                     }
                     progressBar.animate().setDuration(SCAN_DURATION).translationX(progressBar.width.toFloat()).withEndAction {
-                        animation.cancelAnimation()
+                        animation.speed = 0.1f
                         scanning = false
                         bluetoothLeScanner!!.stopScan(CustomLeScanCallback)
+                        bluetoothAdapter!!.cancelDiscovery()
                     }.start()
                 }
                 scanning = true
                 Log.d("scan_results_check", "Scanner object again: $bluetoothLeScanner")
                 bluetoothLeScanner!!.startScan(filters, settings, CustomLeScanCallback)
+                bluetoothAdapter!!.startDiscovery()
             }
         }
     }
@@ -266,7 +338,17 @@ class BluetoothMainPage : Fragment() {
         bluetoothManager = requireContext().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         bluetoothAdapter = bluetoothManager!!.adapter
         bluetoothLeScanner = bluetoothAdapter!!.bluetoothLeScanner
+
         Log.d("permission_check_in_func", "all are defined, $bluetoothManager $bluetoothAdapter $bluetoothLeScanner")
+    }
+
+    fun areAllPermissionsGranted() : Boolean{
+        if(!isAndroid11OrLower()){
+            return !isAnyPermissionDenied()
+        }
+        else{
+            return !isAnyPermissionDenied() && checkBackgroundLocationPermission()
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -277,24 +359,6 @@ class BluetoothMainPage : Fragment() {
         }
         else
             requestPermissionLauncher.launch(list)
-    }
-
-    fun handlePostRequest(context: Context){
-        Toast.makeText(context, "This module needs specific permissions to operate. You can continue experiencing the rest of the app irrelevant to the permissions.", Toast.LENGTH_LONG).show()
-    }
-
-    fun hideButtons(){
-        if(!isAnyPermissionDenied() || checkBackgroundLocationPermission()) {
-            binding.requestPermissionsButton.visibility = View.GONE
-            binding.requestPermissionsButton.isEnabled = false
-            binding.askForPermissionAgainAnimation.visibility = View.GONE
-
-            binding.scanDevicesButton.visibility = View.VISIBLE
-            binding.startScanText.visibility = View.VISIBLE
-            binding.startScanDecoration.visibility = View.VISIBLE
-            binding.originalProgressBar.visibility = View.VISIBLE
-            binding.barToMove.visibility = View.VISIBLE
-        }
     }
 
     fun displayButtons(){
@@ -313,6 +377,35 @@ class BluetoothMainPage : Fragment() {
         }
     }
 
+    fun handlePostRequest(context: Context){
+        Toast.makeText(context, "This module needs specific permissions to operate. You can continue experiencing the rest of the app irrelevant to the permissions.", Toast.LENGTH_LONG).show()
+    }
+
+    fun handleDeviceClick(item: BluetoothDeviceListItem){
+        if(item.isConnected){
+            val action = BluetoothMainPageDirections.bMainToChat()
+            findNavController().navigate(action)
+        }
+        else{
+            val device = bluetoothAdapter.getRemoteDevice(item.macAddress)
+            bluetoothChatViewModel.connectToDevice(device)
+        }
+    }
+
+    fun hideButtons(){
+        if(!isAnyPermissionDenied() || checkBackgroundLocationPermission()) {
+            binding.requestPermissionsButton.visibility = View.GONE
+            binding.requestPermissionsButton.isEnabled = false
+            binding.askForPermissionAgainAnimation.visibility = View.GONE
+
+            binding.scanDevicesButton.visibility = View.VISIBLE
+            binding.startScanText.visibility = View.VISIBLE
+            binding.startScanDecoration.visibility = View.VISIBLE
+            binding.originalProgressBar.visibility = View.VISIBLE
+            binding.barToMove.visibility = View.VISIBLE
+        }
+    }
+
     fun checkBackgroundLocationPermission(): Boolean{
         return requireContext().checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
@@ -321,18 +414,18 @@ class BluetoothMainPage : Fragment() {
         return permissions.any { permission -> requireContext().checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED }
     }
 
-    fun areAllPermissionsGranted() : Boolean{
-        return !isAnyPermissionDenied()
-        /*if(!isAndroid11OrLower()){
-            return !isAnyPermissionDenied()
-        }
-        else{
-            return !isAnyPermissionDenied() && checkBackgroundLocationPermission()
-        }*/
-    }
-
     fun isAndroid11OrLower(): Boolean{
         return Build.VERSION.SDK_INT <= 30
+    }
+
+    @SuppressLint("MissingPermission")
+    fun makeDeviceDiscoverable(){
+        if(bluetoothAdapter!!.scanMode != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE){
+            val intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
+                putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
+            }
+            startActivity(intent)
+        }
     }
 
     fun savePermissionsAsAccepted(){
@@ -343,12 +436,20 @@ class BluetoothMainPage : Fragment() {
         saveTheAnswer(PERM_ANSWER_KEY, requireContext(), SEEN_DIALOGUE_REFUSE)
     }
 
-    @RequiresPermission(allOf = [android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH_CONNECT])
+    @SuppressLint("MissingPermission")
     fun postSuccessfulPermissionRequestSchedule(){
         savePermissionsAsAccepted()
         hideButtons()
         getPairedDevices()
         defineBluetoothVariables()
+    }
+
+    @SuppressLint("MissingPermission")
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        requireContext().unregisterReceiver(receiver)
     }
 
 }

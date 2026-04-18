@@ -1,23 +1,82 @@
 package com.example.chatapp.fragments.bluetooth
 
+import android.annotation.SuppressLint
+import android.bluetooth.BluetoothDevice
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatapp.R
+import com.example.chatapp.adapters.BluetoothChatMessageAdapter
+import com.example.chatapp.databinding.BFragmentChatPageBinding
+import com.example.chatapp.util.createBluetoothItem
+import com.example.chatapp.viewmodels.BluetoothModule.BluetoothMessagingViewModel
 
 class BluetoothChatPage : Fragment() {
+
+    private lateinit var binding: BFragmentChatPageBinding
+    private val bluetoothChatViewModel: BluetoothMessagingViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
+@SuppressLint("MissingPermission")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.b_fragment_chat_page, container, false)
+    ): View {
+        binding = BFragmentChatPageBinding.inflate(inflater, container, false)
+
+        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        val adapter = BluetoothChatMessageAdapter()
+        binding.bChatMessageRV.adapter = adapter
+        binding.bChatMessageRV.layoutManager = layoutManager
+
+        bluetoothChatViewModel.deviceToChat.observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                Log.d("server_check_chat_page", "Device connected: ${user.name}")
+                val item = createBluetoothItem(user)
+                binding.bChattingUserNick.text = item.deviceName
+            } else {
+                Log.d("server_check_chat_page", "Waiting for device data...")
+            }
+        }
+
+        bluetoothChatViewModel.messageList.observe(viewLifecycleOwner) { list ->
+            adapter.submitList(list)
+        }
+
+        binding.bSendMessageButton.setOnClickListener {
+            val text = binding.bSendMessageTextField.text.toString()
+            if (text.isNotEmpty()) {
+                bluetoothChatViewModel.sendMessage(text)
+                binding.bSendMessageTextField.setText("")
+            }
+        }
+
+        return binding.root
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        bluetoothChatViewModel.deviceToChat.observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                val item = createBluetoothItem(user)
+                binding.bChattingUserNick.text = item.deviceName
+                Log.d("server_check_chat_page", "Device found: ${user.name}")
+            } else {
+                Log.d("server_check_chat_page", "Waiting for device data...")
+            }
+        }
     }
 
 }
