@@ -55,25 +55,12 @@ class BluetoothMainPage : Fragment() {
     private val SEEN_DIALOGUE_REFUSE = ObjectConstants.SEEN_DIALOGUE_REFUSE
     private val SEEN_DIALOGUE_ACCEPT = ObjectConstants.SEEN_DIALOGUE_ACCEPT
 
-    private val permissions = if(!isAndroid11OrLower())arrayOf(
-        Manifest.permission.BLUETOOTH_SCAN,
-        Manifest.permission.BLUETOOTH_CONNECT,
-        Manifest.permission.BLUETOOTH_ADVERTISE
-    )
-    else{
-        arrayOf(
-            Manifest.permission.BLUETOOTH,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION)
-    }
-
     private val bluetoothChatViewModel: BluetoothMessagingViewModel by activityViewModels()
 
     @Inject lateinit var bluetoothManager: BluetoothManager
     @Inject lateinit var bluetoothAdapter: BluetoothAdapter
     private var bluetoothLeScanner: BluetoothLeScanner? = null
 
-    private var bluetoothAdvertisingSet: BluetoothLeAdvertiser? = null
     private var scanning = false
     private val SCAN_DURATION: Long = 10000
     private val CustomLeScanCallback: ScanCallback = object: ScanCallback() {
@@ -122,6 +109,18 @@ class BluetoothMainPage : Fragment() {
     private val bluetoothDeviceListAdapter = BluetoothUserListAdapter{device -> handleDeviceClick(device)}
     private val bluetoothDevicePairedListAdapter = BluetoothUserListAdapter{device -> handleDeviceClick(device)}
 
+    private val permissions = if(!isAndroid11OrLower())arrayOf(
+        Manifest.permission.BLUETOOTH_SCAN,
+        Manifest.permission.BLUETOOTH_CONNECT,
+        Manifest.permission.BLUETOOTH_ADVERTISE
+    )
+    else{
+        arrayOf(
+            Manifest.permission.BLUETOOTH,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
     @SuppressLint("MissingPermission")
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permissions ->
         permissions.entries.forEach { permission ->
@@ -130,8 +129,6 @@ class BluetoothMainPage : Fragment() {
         if(permissions.entries.any { !it.value }) {
             savePermissionsAsRefused()
             displayButtons()
-            Log.d("answer_check", "answer should be $SEEN_DIALOGUE_REFUSE")
-            Log.d("answer_check", "and answer is ${fetchTheAnswer(PERM_ANSWER_KEY, requireContext())}")
             handlePostRequest(requireContext())
             howManyRefused(requireContext())
         }
@@ -275,10 +272,14 @@ class BluetoothMainPage : Fragment() {
     @SuppressLint("MissingPermission")
     fun getPairedDevices(){
         if(areAllPermissionsGranted()){
+            val pairedList = ArrayList<BluetoothDeviceListItem>()
             defineBluetoothVariables()
             val pairedDevices = bluetoothAdapter?.bondedDevices
-            val pairedList = ArrayList<BluetoothDeviceListItem>()
             if(pairedDevices != null){
+                val currentDevicesAddresses = bluetoothDevicePairedListAdapter.currentList.map { it.macAddress }
+                val newDevicesAddresses = pairedDevices.map { it.address }
+                if(currentDevicesAddresses.size == newDevicesAddresses.size && currentDevicesAddresses.containsAll(newDevicesAddresses))
+                    return
                 val filteredList = pairedDevices.filter { it.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.PHONE || it.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.COMPUTER }
                 filteredList.forEach { device ->
                     val item = createBluetoothItem(device)
@@ -342,6 +343,20 @@ class BluetoothMainPage : Fragment() {
         Log.d("permission_check_in_func", "all are defined, $bluetoothManager $bluetoothAdapter $bluetoothLeScanner")
     }
 
+    @SuppressLint("MissingPermission")
+    fun checkPermission(list: Array<String>){
+        if(areAllPermissionsGranted()) {
+            Log.d("permission_check_in_func", "all permissions are granted")
+            postSuccessfulPermissionRequestSchedule()
+        }
+        else
+            requestPermissionLauncher.launch(list)
+    }
+
+    fun isAnyPermissionDenied(): Boolean{
+        return permissions.any { permission -> requireContext().checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED }
+    }
+
     fun areAllPermissionsGranted() : Boolean{
         if(!isAndroid11OrLower()){
             return !isAnyPermissionDenied()
@@ -351,14 +366,8 @@ class BluetoothMainPage : Fragment() {
         }
     }
 
-    @SuppressLint("MissingPermission")
-    fun checkPermission(list: Array<String>){
-        if(areAllPermissionsGranted()) {
-            Log.d("permission_check_in_func", "all permissions are granted")
-            postSuccessfulPermissionRequestSchedule()
-        }
-        else
-            requestPermissionLauncher.launch(list)
+    fun isAndroid11OrLower(): Boolean{
+        return Build.VERSION.SDK_INT <= 30
     }
 
     fun displayButtons(){
@@ -408,14 +417,6 @@ class BluetoothMainPage : Fragment() {
 
     fun checkBackgroundLocationPermission(): Boolean{
         return requireContext().checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
-    }
-
-    fun isAnyPermissionDenied(): Boolean{
-        return permissions.any { permission -> requireContext().checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED }
-    }
-
-    fun isAndroid11OrLower(): Boolean{
-        return Build.VERSION.SDK_INT <= 30
     }
 
     @SuppressLint("MissingPermission")
