@@ -212,16 +212,7 @@ class BluetoothMainPage : Fragment() {
                 bluetoothChatViewModel.updateIsConnected(false)
             }
         }
-    }
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
         defineBluetoothVariables()
-        binding = BFragmentMainPageBinding.inflate(inflater)
-
         val answer = fetchTheAnswer(PERM_ANSWER_KEY, requireContext())
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val pairedLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -271,6 +262,14 @@ class BluetoothMainPage : Fragment() {
             defineBluetoothVariables()
             scanDevices()
         }
+    }
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = BFragmentMainPageBinding.inflate(inflater)
 
         return binding.root
     }
