@@ -61,6 +61,8 @@ class BluetoothMainPage : Fragment() {
     @Inject lateinit var bluetoothAdapter: BluetoothAdapter
     private var bluetoothLeScanner: BluetoothLeScanner? = null
 
+    private var deviceList = listOf<BluetoothDevice>()
+
     private var scanning = false
     private val SCAN_DURATION: Long = 10000
     private val CustomLeScanCallback: ScanCallback = object: ScanCallback() {
@@ -261,6 +263,10 @@ class BluetoothMainPage : Fragment() {
             }
         }
 
+        bluetoothChatViewModel.devicesToChat.observe(viewLifecycleOwner) { list ->
+            deviceList = list.mapNotNull { device -> device }
+        }
+
         binding.startScanText.setOnClickListener {
             defineBluetoothVariables()
             scanDevices()
@@ -371,8 +377,6 @@ class BluetoothMainPage : Fragment() {
     }
 
     fun displayButtons(){
-        /*val dontAskAgain = fetchTheAnswer(DONT_ASK_AGAIN_KEY, requireContext())
-        Log.d("answer_check", "dontAskAgain $dontAskAgain")*/
         if(isAnyPermissionDenied()) {
             binding.requestPermissionsButton.visibility = View.VISIBLE
             binding.requestPermissionsButton.isEnabled = true
@@ -391,13 +395,17 @@ class BluetoothMainPage : Fragment() {
     }
 
     fun handleDeviceClick(item: BluetoothDeviceListItem){
+        val device = bluetoothAdapter.getRemoteDevice(item.macAddress)
         if(item.isConnected){
             val action = BluetoothMainPageDirections.bMainToChat()
+            bluetoothChatViewModel.updateChatDevices(listOf(device))
             findNavController().navigate(action)
         }
         else{
-            val device = bluetoothAdapter.getRemoteDevice(item.macAddress)
-            bluetoothChatViewModel.connectToDevice(device)
+            if(!deviceList.contains(device))
+                bluetoothChatViewModel.connectToDevice(device)
+            else
+                Toast.makeText(requireContext(), "You are already connected to this device", Toast.LENGTH_LONG).show()
         }
     }
 
