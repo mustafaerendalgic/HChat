@@ -12,6 +12,9 @@
 
 ---
 
+> ⚠️ This project was developed as a graduation thesis at Çukurova University.
+> Feel free to use it for learning purposes. If you reference it in academic work, please cite appropriately.
+
 ## 📑 Table of Contents
 
 - [Project Overview](#-project-overview)
@@ -50,7 +53,7 @@ By leveraging **Bluetooth RFCOMM** (Radio Frequency Communication), ChatApp esta
 
 ### Bluetooth (Offline P2P) Mode
 | Bluetooth Scan | Bluetooth Chat |
-| :---: | :---: | :---: |
+| :---: | :---: |
 | <img src="https://github.com/user-attachments/assets/7a2bc9b2-2883-413b-99c9-7d5661e9b0e2" width="200" /> | <img src="https://github.com/user-attachments/assets/8f28c0ba-00ec-49f3-b4ed-262eccfe32d5" width="200" /> |
 
 ---
