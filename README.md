@@ -24,7 +24,6 @@
 - [Firebase Setup](#-firebase-setup)
 - [Permissions](#-permissions)
 - [How It Works](#-how-it-works)
-- [Contributing](#-contributing)
 - [License](#-license)
 
 ---
@@ -50,9 +49,9 @@ By leveraging **Bluetooth RFCOMM** (Radio Frequency Communication), ChatApp esta
 | <img src="https://github.com/user-attachments/assets/215fee3a-0a90-48b6-ac1e-12c96458c5ed" width="200" /> | <img src="https://github.com/user-attachments/assets/3cc7e437-cdd6-4d76-bf71-c2b242315333" width="200" /> | <img src="https://github.com/user-attachments/assets/17fa258b-aa87-44a9-8c4e-227ece0d30ff" width="200" /> |
 
 ### Bluetooth (Offline P2P) Mode
-| Bluetooth Scan | Connected Devices | Bluetooth Chat |
+| Bluetooth Scan | Bluetooth Chat |
 | :---: | :---: | :---: |
-| <img src="https://github.com/user-attachments/assets/7a2bc9b2-2883-413b-99c9-7d5661e9b0e2" width="200" /> | <img src="https://github.com/user-attachments/assets/10ead6c9-bbdb-459e-8a83-b118f7132ab7" width="200" /> | <img src="https://github.com/user-attachments/assets/8f28c0ba-00ec-49f3-b4ed-262eccfe32d5" width="200" /> |
+| <img src="https://github.com/user-attachments/assets/7a2bc9b2-2883-413b-99c9-7d5661e9b0e2" width="200" /> | <img src="https://github.com/user-attachments/assets/8f28c0ba-00ec-49f3-b4ed-262eccfe32d5" width="200" /> |
 
 ---
 
