@@ -1,10 +1,10 @@
-# 📱 BChat - Hybrid Android Messaging Platform
+# 📱 Umbrella - Hybrid Android Messaging Platform
 
 ![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 ![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)
 
-**BChat** is a modular Android messaging application built with **Kotlin**, designed to support communication through both **cloud-based messaging** and **Bluetooth peer-to-peer messaging**. The goal of the project is to provide a more resilient communication experience in situations where internet access is limited or unavailable.
+**Umbrella** is a modular Android messaging application built with **Kotlin**, designed to support communication through both **cloud-based messaging** and **Bluetooth peer-to-peer messaging**. The goal of the project is to provide a more resilient communication experience in situations where internet access is limited or unavailable.
 
 > ⚠️ **Project Status:** This project is currently being developed as an active **Graduation Thesis (Interim Phase 2)**.
 
@@ -219,43 +219,8 @@ Make sure the correct permissions are declared in the manifest and requested at 
 
 ---
 
-## 🗺 Roadmap
 
-- [x] Bluetooth-based device discovery and messaging flow
-- [x] Internet-based login and chat flow
-- [ ] Local message persistence
-- [ ] End-to-end encryption improvements
-- [ ] Message delivery and status tracking
-- [ ] Improved UI/UX polish
-- [ ] Group or multi-user chat support
-- [ ] Media and file sharing
-- [ ] Extended offline communication features
 
----
-
-## ⚠️ Notes on Accuracy
-
-A few parts of the original README were slightly too strong or needed cleanup:
-
-- **"Seamlessly transition"** was softened because that suggests automatic switching, which may not be implemented.
-- **"Firebase-powered"** should only stay if your internet chat module actually uses Firebase in code.
-- **"Dedicated multi-threaded socket management"** was removed because it sounds very implementation-specific unless clearly shown in the project.
-- The original **installation block** was broken and is fixed above.
-- The **screenshots table** formatting was corrected so it renders properly on GitHub.
-
----
-
-## 👨‍💻 Author
-
-Developed as an Android Kotlin hybrid messaging project focused on Bluetooth and internet-based communication.
-
----
-
-## 📄 License
-
-This project is intended for educational and academic use unless otherwise specified.
-
-You can add a license here, such as:
 
 - MIT License
 - Apache 2.0
