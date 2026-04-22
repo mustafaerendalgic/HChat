@@ -12,9 +12,6 @@
 
 ---
 
-> ⚠️ This project was developed as a graduation thesis at Çukurova University.
-> Feel free to use it for learning purposes. If you reference it in academic work, please cite appropriately.
-
 ## 📑 Table of Contents
 
 - [Project Overview](#-project-overview)
@@ -102,19 +99,20 @@ ChatApp follows the **MVVM (Model-View-ViewModel)** architectural pattern with a
 
 ## 🛠 Tech Stack
 
-| Category | Technology |
-|---|---|
-| **Language** | Kotlin (with Coroutines for non-blocking operations) |
-| **IDE** | Android Studio Iguana 2023.2.1 |
-| **Min SDK** | 26 (Android 8.0 Oreo) |
-| **Target SDK** | 34 (Android 14) |
-| **Backend (Online)** | Firebase Realtime Database, Firebase Authentication |
-| **Backend (Offline)** | Bluetooth Classic — RFCOMM / SPP |
-| **Architecture** | MVVM + LiveData + Repository Pattern |
-| **Dependency Injection** | Hilt (Dagger) |
-| **Navigation** | Android Navigation Component |
-| **Async** | Kotlin Coroutines |
-| **UI** | ViewBinding, ListAdapter, RecyclerView |
+| Category | Technology | Version |
+|---|---|---|
+| **Language** | Kotlin | 2.2.10 |
+| **IDE** | Android Studio Iguana | 2023.2.1 |
+| **Min SDK** | Android 8.0 Oreo | API 26 |
+| **Target SDK** | Android 14 | API 34 |
+| **Build System** | Gradle (KTS) + KSP | KSP 2.3.1 |
+| **Backend (Online)** | Firebase Realtime Database + Auth | google-services 4.4.4 |
+| **Backend (Offline)** | Bluetooth Classic — RFCOMM / SPP | — |
+| **Architecture** | MVVM + LiveData + Repository Pattern | — |
+| **Dependency Injection** | Hilt (Dagger) | 2.56 |
+| **Navigation** | Android Navigation Component + Safe Args | 2.7.7 |
+| **Async** | Kotlin Coroutines | — |
+| **UI** | ViewBinding, ListAdapter, RecyclerView | — |
 
 ---
 
@@ -246,17 +244,21 @@ chatApp/
 
 The app requests the following permissions, managed through a runtime permission framework:
 
-| Permission | Purpose | Required API |
+| Permission | Purpose | API Scope |
 |---|---|---|
-| `BLUETOOTH` | Basic Bluetooth operations | API < 31 |
-| `BLUETOOTH_ADMIN` | Device discovery | API < 31 |
-| `BLUETOOTH_SCAN` | Scan for nearby devices | API 31+ |
-| `BLUETOOTH_CONNECT` | Connect to paired devices | API 31+ |
-| `BLUETOOTH_ADVERTISE` | Make device discoverable | API 31+ |
-| `ACCESS_FINE_LOCATION` | Required for BT scanning on older APIs | API < 31 |
 | `INTERNET` | Firebase cloud messaging | All |
+| `BLUETOOTH` | Basic Bluetooth operations | maxSdkVersion 30 |
+| `BLUETOOTH_ADMIN` | Device discovery & pairing | maxSdkVersion 30 |
+| `ACCESS_FINE_LOCATION` | Required for BT scanning on legacy APIs | maxSdkVersion 30 |
+| `ACCESS_COARSE_LOCATION` | Required for BT scanning on legacy APIs | maxSdkVersion 30 |
+| `ACCESS_BACKGROUND_LOCATION` | Background BT scanning on legacy APIs | maxSdkVersion 30 |
+| `BLUETOOTH_SCAN` | Scan for nearby devices (`neverForLocation`) | API 31+ |
+| `BLUETOOTH_CONNECT` | Connect to paired/discovered devices | API 31+ |
+| `BLUETOOTH_ADVERTISE` | Make device discoverable to peers | API 31+ |
 
-The app includes a comprehensive **Permission Management Framework** that gracefully handles both legacy (pre-API 31) and modern permission models.
+> The app also declares `android.hardware.bluetooth_le` as a **required hardware feature**, meaning it will only be installable on devices with BLE support.
+
+The app includes a comprehensive **Permission Management Framework** that gracefully handles both legacy (pre-API 31) and modern (API 31+) permission models.
 
 ---
 
