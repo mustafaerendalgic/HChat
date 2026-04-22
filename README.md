@@ -1,227 +1,246 @@
-# 📱 Umbrella - Hybrid Android Messaging Platform
+# 📱 ChatApp — Hybrid Android Messaging Platform
 
 ![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 ![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)
+![Bluetooth](https://img.shields.io/badge/Bluetooth-0082FC?style=for-the-badge&logo=bluetooth&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
 
-**Umbrella** is a modular Android messaging application built with **Kotlin**, designed to support communication through both **cloud-based messaging** and **Bluetooth peer-to-peer messaging**. The goal of the project is to provide a more resilient communication experience in situations where internet access is limited or unavailable.
+> **Graduation Thesis Project** — Çukurova University, Department of Computer Engineering
 
-> ⚠️ **Project Status:** This project is currently being developed as an active **Graduation Thesis (Interim Phase 2)**.
+**ChatApp** is a sophisticated Android communication platform engineered to work seamlessly in both connected and disconnected environments. It combines cloud-based Firebase messaging with low-level Bluetooth RFCOMM peer-to-peer communication, making it resilient in scenarios where internet infrastructure is compromised — such as natural disasters, remote industrial areas, or off-grid deployments.
 
 ---
 
-## 📖 Overview
+## 📑 Table of Contents
 
-BChat combines two messaging approaches in a single Android application:
+- [Project Overview](#-project-overview)
+- [Screenshots](#-screenshots)
+- [Key Technical Features](#-key-technical-features)
+- [Architecture](#-architecture)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Installation](#-installation)
+- [Firebase Setup](#-firebase-setup)
+- [Permissions](#-permissions)
+- [How It Works](#-how-it-works)
+- [Contributing](#-contributing)
+- [License](#-license)
 
-- **Cloud Chat** for network-based messaging
-- **Bluetooth Chat** for short-range offline communication between nearby devices
+---
 
-The project is structured around modern Android development practices, including **MVVM**, **Hilt**, **ViewModels**, **RecyclerView adapters**, and **modular feature separation**.
+## 📋 Project Overview
+
+The core objective of this thesis is to engineer a resilient messaging platform that seamlessly transitions between two communication modes:
+
+| Mode | Technology | Requirement |
+|---|---|---|
+| **Online** | Firebase Realtime Database | Active internet connection |
+| **Offline P2P** | Bluetooth RFCOMM | No internet needed — device proximity only |
+
+By leveraging **Bluetooth RFCOMM** (Radio Frequency Communication), ChatApp establishes stable, high-throughput serial port emulations for real-time text exchange without requiring any internet connectivity. This hybrid model ensures continuous communication regardless of infrastructure availability.
 
 ---
 
 ## 📸 Screenshots
 
-| | | | | |
-|---|---|---|---|---|
-| <img src="https://github.com/user-attachments/assets/215fee3a-0a90-48b6-ac1e-12c96458c5ed" width="200" /> | <img src="https://github.com/user-attachments/assets/3cc7e437-cdd6-4d76-bf71-c2b242315333" width="200" /> | <img src="https://github.com/user-attachments/assets/17fa258b-aa87-44a9-8c4e-227ece0d30ff" width="200" /> | <img src="https://github.com/user-attachments/assets/10ead6c9-bbdb-459e-8a83-b118f7132ab7" width="200" /> | <img src="https://github.com/user-attachments/assets/7a2bc9b2-2883-413b-99c9-7d5661e9b0e2" width="200" /> |
-| <img src="https://github.com/user-attachments/assets/8f28c0ba-00ec-49f3-b4ed-262eccfe32d5" width="200" /> |  |  |  |  |
+| Main Menu | Scanning Screen | Bluetooth Scan | Chat Interface |
+| :---: | :---: | :---: | :---: |
+| <img src="https://github.com/user-attachments/assets/215fee3a-0a90-48b6-ac1e-12c96458c5ed" width="200" /> | <img src="https://github.com/user-attachments/assets/3cc7e437-cdd6-4d76-bf71-c2b242315333" width="200" /> | <img src="https://github.com/user-attachments/assets/7a2bc9b2-2883-413b-99c9-7d5661e9b0e2" width="200" /> | <img src="https://github.com/user-attachments/assets/10ead6c9-bbdb-459e-8a83-b118f7132ab7" width="200" /> |
+| <img src="https://github.com/user-attachments/assets/17fa258b-aa87-44a9-8c4e-227ece0d30ff" width="200" /> | <img src="https://github.com/user-attachments/assets/8f28c0ba-00ec-49f3-b4ed-262eccfe32d5" width="200" /> | | |
 
 ---
 
-## ✨ Key Features
+## ✨ Key Technical Features
 
-- **Hybrid Messaging Architecture**  
-  Supports both internet-based messaging and offline Bluetooth communication inside one application.
+- **🔀 Hybrid Communication Architecture** — Integrates Firebase Realtime Database for online messaging and low-level Bluetooth Socket Programming for fully offline P2P sessions. The app automatically handles the context of each connection type.
 
-- **Bluetooth RFCOMM Communication**  
-  Uses Bluetooth socket-based communication for real-time message exchange between nearby Android devices.
+- **📡 RFCOMM Data Streaming** — Implements asynchronous multi-threading to manage device discovery, connection handshakes, and bidirectional data streams without degrading UI responsiveness.
 
-- **Authentication and Online Messaging Flow**  
-  Includes separate screens for login, signup, user listing, and internet chat flow.
+- **🔒 Modern Security Compliance** — Includes a comprehensive Permission Management Framework specifically tailored for **Android 12+ (API 31)** security standards for hardware-level Bluetooth interactions (`BLUETOOTH_SCAN`, `BLUETOOTH_CONNECT`, `BLUETOOTH_ADVERTISE`).
 
-- **Permission Handling for Modern Android Versions**  
-  Handles runtime permissions required for Bluetooth operations, especially on newer Android versions.
+- **⚡ Reactive UI Engine** — Built using **MVVM** architecture combined with **LiveData** and **ListAdapter** for memory-efficient, lifecycle-aware data synchronization.
 
-- **Reactive UI Updates**  
-  Uses lifecycle-aware components and adapter-based list rendering for chat messages and device/user lists.
+- **💉 Dependency Injection via Hilt** — All components are wired through Hilt (Dagger), enabling scalable, testable, and maintainable code architecture.
 
-- **Modular Code Structure**  
-  Clear separation between Bluetooth, internet, and shared app components.
+- **🧭 Single-Activity Navigation** — Leverages the Android Navigation Component for centralized, type-safe fragment management with a clean back stack.
+
+---
+
+## 🏛 Architecture
+
+ChatApp follows the **MVVM (Model-View-ViewModel)** architectural pattern with a clean separation of concerns:
+
+```
+┌──────────────────────────────────────────────┐
+│                    UI Layer                   │
+│         Fragments + XML Layouts               │
+└──────────────────┬───────────────────────────┘
+                   │ observes LiveData
+┌──────────────────▼───────────────────────────┐
+│                ViewModel Layer                │
+│     State management, business logic          │
+└──────────────────┬───────────────────────────┘
+                   │
+       ┌───────────┴───────────┐
+       │                       │
+┌──────▼──────┐        ┌───────▼──────┐
+│  Firebase   │        │  Bluetooth   │
+│  Repository │        │  Repository  │
+│  (Online)   │        │  (Offline)   │
+└─────────────┘        └──────────────┘
+```
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Language:** Kotlin
-- **Platform:** Android
-- **Architecture:** MVVM
-- **UI:** XML Layouts, Fragments, RecyclerView, View Binding
-- **Dependency Injection:** Hilt
-- **State / Lifecycle:** ViewModel, LiveData
-- **Connectivity:**
-  - Bluetooth RFCOMM
-  - Cloud-based messaging flow
-- **Utilities:** Permission handling, date formatting, item mapping helpers
-
-> If your internet chat module is backed by Firebase, the Firebase badge and mention are accurate. If not, remove the Firebase badge to avoid confusion.
-
----
-
-## 🧠 Architecture
-
-BChat follows the **MVVM** pattern to separate presentation logic from UI code and keep the application easier to maintain.
-
-### Layers
-
-- **UI Layer**
-  - `MainActivity`
-  - Fragments for main menu, Bluetooth screens, login/signup, and internet chat
-
-- **Presentation Layer**
-  - ViewModels manage UI state, business logic, and chat-related workflows
-
-- **Data Layer**
-  - Entity classes represent users, Bluetooth devices, and chat messages
-
-- **Dependency Injection Layer**
-  - Hilt manages shared dependencies across the application
-
-- **Utility Layer**
-  - Handles permissions, date formatting, and Bluetooth item creation
+| Category | Technology |
+|---|---|
+| **Language** | Kotlin (with Coroutines for non-blocking operations) |
+| **IDE** | Android Studio Iguana 2023.2.1 |
+| **Min SDK** | 26 (Android 8.0 Oreo) |
+| **Target SDK** | 34 (Android 14) |
+| **Backend (Online)** | Firebase Realtime Database, Firebase Authentication |
+| **Backend (Offline)** | Bluetooth Classic — RFCOMM / SPP |
+| **Architecture** | MVVM + LiveData + Repository Pattern |
+| **Dependency Injection** | Hilt (Dagger) |
+| **Navigation** | Android Navigation Component |
+| **Async** | Kotlin Coroutines |
+| **UI** | ViewBinding, ListAdapter, RecyclerView |
 
 ---
 
-## 🔄 Application Flow
+## 📂 Project Structure
 
-### Main Navigation
-1. The app launches from `MainActivity`
-2. The user is directed to the main menu
-3. The user chooses one of the available communication modes:
-   - **Bluetooth Chat**
-   - **Internet Chat**
-
-### Bluetooth Chat Flow
-1. Open the Bluetooth main page
-2. Discover or list nearby devices
-3. Select a device
-4. Open the Bluetooth chat page
-5. Send and receive messages through Bluetooth
-
-### Internet Chat Flow
-1. Log in or create an account
-2. Open the internet main page
-3. Select a user or conversation
-4. Open the internet chat page
-5. Exchange messages online
+```
+chatApp/
+├── app/
+│   ├── src/
+│   │   └── main/
+│   │       ├── java/com/example/chatapp/
+│   │       │   ├── bluetooth/         # Bluetooth RFCOMM logic
+│   │       │   │   ├── BluetoothManager.kt
+│   │       │   │   ├── ConnectThread.kt
+│   │       │   │   └── AcceptThread.kt
+│   │       │   ├── firebase/          # Firebase messaging layer
+│   │       │   │   └── FirebaseRepository.kt
+│   │       │   ├── ui/                # Fragments and Activities
+│   │       │   │   ├── MainFragment.kt
+│   │       │   │   ├── ScanFragment.kt
+│   │       │   │   └── ChatFragment.kt
+│   │       │   ├── viewmodel/         # ViewModels
+│   │       │   └── di/                # Hilt modules
+│   │       ├── res/
+│   │       │   ├── layout/
+│   │       │   ├── navigation/
+│   │       │   └── values/
+│   │       └── AndroidManifest.xml
+│   └── build.gradle
+├── google-services.json               # (not committed — add your own)
+└── build.gradle
+```
 
 ---
 
-## 📂 Core Components
+## 📦 Installation
 
-### Main
-- `MainActivity.kt`  
-  Entry point of the application.
+### Prerequisites
 
-- `MainMenu.kt`  
-  Provides navigation between Bluetooth and Internet messaging modules.
+- Android Studio **Iguana (2023.2.1)** or newer
+- Android device or emulator running **API 26+**
+- A Firebase project (see [Firebase Setup](#-firebase-setup))
 
-### Bluetooth Module
-- `BluetoothMainPage.kt`  
-  Handles device listing and Bluetooth-related interactions.
+### Steps
 
-- `BluetoothChatPage.kt`  
-  Displays Bluetooth conversations.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/mustafaerendalgic/chatApp.git
+   cd chatApp
+   ```
 
-- `BluetoothMessagingViewModel.kt`  
-  Manages Bluetooth chat logic and message state.
+2. **Open in Android Studio:**
+   - Launch Android Studio
+   - Select **File → Open** and navigate to the cloned folder
 
-### Internet Module
-- `LoginPage.kt`  
-  Handles user authentication.
+3. **Add your Firebase config file:**
+   - Place your `google-services.json` inside `app/`
+   - (See [Firebase Setup](#-firebase-setup) below)
 
-- `SignUpPage.kt`  
-  Handles account registration.
+4. **Sync Gradle:**
+   - Android Studio will prompt you — click **Sync Now**
 
-- `InternetMainPage.kt`  
-  Displays the main internet chat interface or user list.
+5. **Build & Run:**
+   - Connect a physical device (recommended for Bluetooth testing) or start an emulator
+   - Press **Run ▶** or use `Shift + F10`
 
-- `InternetChatPage.kt`  
-  Displays online chat conversations.
+> ⚠️ **Note:** Bluetooth features require a **physical Android device**. Emulators do not support Bluetooth hardware.
 
-- `InternetMainPageViewModel.kt`  
-  Manages internet main page logic.
+---
 
-- `InternetChatPageViewModel.kt`  
-  Manages internet chat logic.
+## 🔥 Firebase Setup
 
-### Data Models
-- `BluetoothMessage.kt`
-- `ChatMessage.kt`
-- `BluetoothDeviceListItem.kt`
-- `UserListItem.kt`
-
-These classes define the core data structures used throughout the app.
-
-### Utilities
-- `permissionDataHandler.kt`  
-  Handles required runtime permissions for Bluetooth and related functionality.
-
-- `dateFormatter.kt`  
-  Formats timestamps for chat messages.
-
-- `createBluetoothItem.kt`  
-  Helps map Bluetooth-related data into UI-friendly items.
+1. Go to [Firebase Console](https://console.firebase.google.com/) and create a new project.
+2. Add an **Android app** with your package name (e.g., `com.example.chatapp`).
+3. Download the `google-services.json` file and place it in the `app/` directory.
+4. Enable the following Firebase services:
+   - **Authentication** (Email/Password or Anonymous)
+   - **Realtime Database** — set rules for development:
+     ```json
+     {
+       "rules": {
+         ".read": "auth != null",
+         ".write": "auth != null"
+       }
+     }
+     ```
 
 ---
 
 ## 🔐 Permissions
 
-This project may require the following permissions depending on the Android version:
+The app requests the following permissions, managed through a runtime permission framework:
 
-- `BLUETOOTH`
-- `BLUETOOTH_ADMIN`
-- `BLUETOOTH_CONNECT`
-- `BLUETOOTH_SCAN`
-- `ACCESS_FINE_LOCATION`
-- `INTERNET`
+| Permission | Purpose | Required API |
+|---|---|---|
+| `BLUETOOTH` | Basic Bluetooth operations | API < 31 |
+| `BLUETOOTH_ADMIN` | Device discovery | API < 31 |
+| `BLUETOOTH_SCAN` | Scan for nearby devices | API 31+ |
+| `BLUETOOTH_CONNECT` | Connect to paired devices | API 31+ |
+| `BLUETOOTH_ADVERTISE` | Make device discoverable | API 31+ |
+| `ACCESS_FINE_LOCATION` | Required for BT scanning on older APIs | API < 31 |
+| `INTERNET` | Firebase cloud messaging | All |
 
-Make sure the correct permissions are declared in the manifest and requested at runtime where necessary.
-
----
-
-## 🚀 Installation
-
-1. Clone the repository:
-
-   ```git
-   git clone https://github.com/mustafaerendalgic/chatApp.git
-   ```
-
-2. Open the project in **Android Studio**
-
-3. Let **Gradle** sync all dependencies
-
-4. Build and run the application on an Android device or emulator
-
-> For Bluetooth testing, a real Android device is strongly recommended.
+The app includes a comprehensive **Permission Management Framework** that gracefully handles both legacy (pre-API 31) and modern permission models.
 
 ---
 
-## ✅ Requirements
+## ⚙️ How It Works
 
-- Android Studio
-- Kotlin support
-- Android SDK
-- Internet connection for cloud messaging tests
-- Bluetooth-enabled Android device for offline messaging tests
+### Online Mode (Firebase)
+1. User authenticates via Firebase Authentication.
+2. Messages are written to Firebase Realtime Database.
+3. All connected clients receive updates in real-time via Firebase listeners.
+
+### Offline Mode (Bluetooth P2P)
+1. One device acts as a **server** — starts an `AcceptThread` listening on an RFCOMM socket.
+2. The other device acts as a **client** — discovers nearby devices and connects via `ConnectThread`.
+3. Once the connection is established, a **`ConnectedThread`** manages the bidirectional data stream.
+4. All operations run on background threads to keep the UI responsive.
+
+
+## 👤 Author
+
+**Mustafa Eren Dalgıç**
+- GitHub: [@mustafaerendalgic](https://github.com/mustafaerendalgic)
+- Çukurova University — Department of Computer Engineering
 
 ---
 
+## 📄 License
 
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
+---
 
-- MIT License
-- Apache 2.0
-- GPL v3
+<p align="center">Made with ❤️ as a Graduation Thesis at Çukurova University</p>
