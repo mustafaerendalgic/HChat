@@ -12,6 +12,11 @@
 
 ---
 
+> ⚠️ This project was developed as a graduation thesis at Çukurova University.
+> Feel free to use it for learning purposes. If you reference it in academic work, please cite appropriately.
+
+---
+
 ## 📑 Table of Contents
 
 - [Project Overview](#-project-overview)
