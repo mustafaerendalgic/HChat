@@ -44,10 +44,15 @@ By leveraging **Bluetooth RFCOMM** (Radio Frequency Communication), ChatApp esta
 
 ## 📸 Screenshots
 
-| Main Menu | Scanning Screen | Bluetooth Scan | Chat Interface |
-| :---: | :---: | :---: | :---: |
-| <img src="https://github.com/user-attachments/assets/215fee3a-0a90-48b6-ac1e-12c96458c5ed" width="200" /> | <img src="https://github.com/user-attachments/assets/3cc7e437-cdd6-4d76-bf71-c2b242315333" width="200" /> | <img src="https://github.com/user-attachments/assets/7a2bc9b2-2883-413b-99c9-7d5661e9b0e2" width="200" /> | <img src="https://github.com/user-attachments/assets/10ead6c9-bbdb-459e-8a83-b118f7132ab7" width="200" /> |
-| <img src="https://github.com/user-attachments/assets/17fa258b-aa87-44a9-8c4e-227ece0d30ff" width="200" /> | <img src="https://github.com/user-attachments/assets/8f28c0ba-00ec-49f3-b4ed-262eccfe32d5" width="200" /> | | |
+### Online Mode
+| Login Screen | Chat List | Chat Interface |
+| :---: | :---: | :---: |
+| <img src="https://github.com/user-attachments/assets/215fee3a-0a90-48b6-ac1e-12c96458c5ed" width="200" /> | <img src="https://github.com/user-attachments/assets/3cc7e437-cdd6-4d76-bf71-c2b242315333" width="200" /> | <img src="https://github.com/user-attachments/assets/17fa258b-aa87-44a9-8c4e-227ece0d30ff" width="200" /> |
+
+### Bluetooth (Offline P2P) Mode
+| Bluetooth Scan | Connected Devices | Bluetooth Chat |
+| :---: | :---: | :---: |
+| <img src="https://github.com/user-attachments/assets/7a2bc9b2-2883-413b-99c9-7d5661e9b0e2" width="200" /> | <img src="https://github.com/user-attachments/assets/10ead6c9-bbdb-459e-8a83-b118f7132ab7" width="200" /> | <img src="https://github.com/user-attachments/assets/8f28c0ba-00ec-49f3-b4ed-262eccfe32d5" width="200" /> |
 
 ---
 
@@ -119,26 +124,64 @@ chatApp/
 │   ├── src/
 │   │   └── main/
 │   │       ├── java/com/example/chatapp/
-│   │       │   ├── bluetooth/         # Bluetooth RFCOMM logic
-│   │       │   │   ├── BluetoothManager.kt
-│   │       │   │   ├── ConnectThread.kt
-│   │       │   │   └── AcceptThread.kt
-│   │       │   ├── firebase/          # Firebase messaging layer
-│   │       │   │   └── FirebaseRepository.kt
-│   │       │   ├── ui/                # Fragments and Activities
-│   │       │   │   ├── MainFragment.kt
-│   │       │   │   ├── ScanFragment.kt
-│   │       │   │   └── ChatFragment.kt
-│   │       │   ├── viewmodel/         # ViewModels
-│   │       │   └── di/                # Hilt modules
+│   │       │   ├── adapters/
+│   │       │   │   ├── BluetoothChatMessageAdapter.kt
+│   │       │   │   ├── BluetoothUserListAdapter.kt
+│   │       │   │   ├── InternetChatMessageAdapter.kt
+│   │       │   │   └── InternetUserListAdapter.kt
+│   │       │   │
+│   │       │   ├── data.entity/
+│   │       │   │   ├── BluetoothDeviceListItem.kt
+│   │       │   │   ├── BluetoothMessage.kt
+│   │       │   │   ├── ChatMessage.kt
+│   │       │   │   ├── ObjectConstants.kt
+│   │       │   │   └── UserListItem.kt
+│   │       │   │
+│   │       │   ├── fragments/
+│   │       │   │   ├── bluetooth/
+│   │       │   │   │   ├── BluetoothChatPage.kt
+│   │       │   │   │   └── BluetoothMainPage.kt
+│   │       │   │   ├── internet/
+│   │       │   │   │   ├── InternetChatPage.kt
+│   │       │   │   │   ├── InternetMainPage.kt
+│   │       │   │   │   ├── LoginPage.kt
+│   │       │   │   │   └── SignUpPage.kt
+│   │       │   │   └── main/
+│   │       │   │       └── MainMenu.kt
+│   │       │   │
+│   │       │   ├── hilt/
+│   │       │   │   ├── HiltAndroidApp.kt
+│   │       │   │   └── Module.kt
+│   │       │   │
+│   │       │   ├── util/
+│   │       │   │   ├── createBluetoothItem.kt
+│   │       │   │   ├── dateFormatter.kt
+│   │       │   │   └── permissionDataHandler.kt
+│   │       │   │
+│   │       │   ├── viewmodels/
+│   │       │   │   ├── BluetoothModule/
+│   │       │   │   │   └── BluetoothMessagingViewModel.kt
+│   │       │   │   └── InternetModule/
+│   │       │   │       ├── InternetChatPageViewModel.kt
+│   │       │   │       ├── InternetMainPageViewModel.kt
+│   │       │   │       └── SignUpViewModel.kt
+│   │       │   │
+│   │       │   └── MainActivity.kt
+│   │       │
 │   │       ├── res/
 │   │       │   ├── layout/
 │   │       │   ├── navigation/
 │   │       │   └── values/
 │   │       └── AndroidManifest.xml
-│   └── build.gradle
-├── google-services.json               # (not committed — add your own)
-└── build.gradle
+│   └── build.gradle.kts
+├── gradle/
+├── .gitignore
+├── build.gradle.kts
+├── gradle.properties
+├── gradlew
+├── gradlew.bat
+├── settings.gradle.kts
+└── google-services.json              # (not committed — add your own)
 ```
 
 ---
@@ -228,6 +271,15 @@ The app includes a comprehensive **Permission Management Framework** that gracef
 3. Once the connection is established, a **`ConnectedThread`** manages the bidirectional data stream.
 4. All operations run on background threads to keep the UI responsive.
 
+```
+Device A (Server)              Device B (Client)
+      │                               │
+      │── AcceptThread (listening) ──▶│
+      │                               │── ConnectThread (connect)
+      │◀────── RFCOMM Connection ─────│
+      │                               │
+      │◀═══ ConnectedThread (R/W) ════│
+```
 
 ## 👤 Author
 
@@ -239,8 +291,8 @@ The app includes a comprehensive **Permission Management Framework** that gracef
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License**
 
 ---
 
-<p align="center">Made with ❤️ as a Graduation Thesis at Çukurova University</p>
+<p align="center">Made as a Graduation Thesis at Çukurova University</p>
