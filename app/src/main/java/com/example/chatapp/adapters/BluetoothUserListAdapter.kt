@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -22,12 +23,14 @@ class bltSeenUserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
     val lastMessage: TextView
     val lastMessageDate: TextView
     val deviceIcon: ImageView
+    val chatIcon: ImageView
     init {
         profilePicture = item.findViewById<ImageView>(R.id.b_profile_photo)
         nickname = item.findViewById<TextView>(R.id.b_username)
         lastMessage = item.findViewById<TextView>(R.id.b_last_message)
         lastMessageDate = item.findViewById<TextView>(R.id.b_last_message_date)
         deviceIcon = item.findViewById<ImageView>(R.id.b_device_icon)
+        chatIcon = item.findViewById<ImageView>(R.id.bluetooth_chat_icon)
     }
 }
 
@@ -111,8 +114,19 @@ class BluetoothUserListAdapter(private val onDeviceClick: (device: BluetoothDevi
                 holder.lastMessageDate.text = item.lastMessageDate
             }
             holder.nickname.text = item.deviceName
-            if(item.isConnected)
-                holder.nickname.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.primary))
+
+            if(item.isConnected){
+                holder.nickname.setTextColor(holder.itemView.context.getColor(R.color.b_primary))
+                holder.chatIcon.visibility = View.VISIBLE
+                holder.chatIcon.isEnabled = true
+                holder.chatIcon.setOnClickListener { holder.itemView.findNavController().navigate(R.id.b_main_to_chat) }
+            }
+            else{
+                holder.nickname.setTextColor(holder.itemView.context.getColor(R.color.textColor))
+                holder.chatIcon.visibility = View.GONE
+                holder.chatIcon.isEnabled = false
+            }
+
             if(item.profilePicture != null)
                 holder.profilePicture.setImageURI(item.profilePicture)
             if(item.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.COMPUTER){

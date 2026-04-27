@@ -47,25 +47,27 @@
 
         <TextView
             android:id="@+id/b_username"
-            android:layout_width="wrap_content"
+            style="@style/primaryTextStyle"
+            android:layout_width="0dp"
             android:layout_height="0dp"
+            android:gravity="start"
             android:text="John Doe"
             android:textStyle="bold"
-            style="@style/primaryTextStyle"
-            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="@id/guide"
+            app:layout_constraintEnd_toStartOf="@+id/bluetooth_chat_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/b_last_message"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:text="Say hi to John Doe!"
             style="@style/primaryTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:alpha="0.5"
-            android:gravity="center"
+            android:gravity="start"
+            android:text="Say hi to John Doe!"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/bluetooth_chat_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide" />
 
@@ -83,6 +85,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide" />
+
+        <ImageView
+            android:id="@+id/bluetooth_chat_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/baseline_chat_bubble_outline_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

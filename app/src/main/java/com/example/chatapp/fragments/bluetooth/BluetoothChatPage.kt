@@ -44,7 +44,7 @@ class BluetoothChatPage : Fragment() {
         val adapter = BluetoothChatMessageAdapter()
         binding.bChatMessageRV.adapter = adapter
         binding.bChatMessageRV.layoutManager = layoutManager
-        bluetoothChatViewModel.devicesToChat.observe(viewLifecycleOwner) { users ->
+        bluetoothChatViewModel.devicesConnected.observe(viewLifecycleOwner) { users ->
             var groupChatName = ""
             for(user in users){
                 if (user != null) {
@@ -58,16 +58,29 @@ class BluetoothChatPage : Fragment() {
         }
 
         var devicesToChat = listOf<BluetoothDevice>()
+        var previousDeviceList = listOf<BluetoothDevice>()
         bluetoothChatViewModel.chatDevices.observe(viewLifecycleOwner) { chatDevices ->
+            previousDeviceList = devicesToChat
             devicesToChat = chatDevices?.toList() ?: emptyList()
+            if(previousDeviceList.size > devicesToChat.size){
+                val deviceList = previousDeviceList.subtract(devicesToChat)
+                Toast.makeText(requireContext(), "observing on b chat page - some devices ended the connection: $deviceList",Toast.LENGTH_LONG).show()
+                findNavController().popBackStack()
+            }
+            else if(previousDeviceList.size < devicesToChat.size){
+                val deviceList = devicesToChat.subtract(previousDeviceList)
+                Toast.makeText(requireContext(), "observing on b chat page - some new devices connected: $deviceList",Toast.LENGTH_LONG).show()
+            }
         }
 
         binding.endConnectionButton.setOnClickListener {
+            Toast.makeText(requireContext(), "Ending the connection", Toast.LENGTH_LONG).show()
             if(devicesToChat.isNotEmpty()) {
                 for (device in devicesToChat) {
                     bluetoothChatViewModel.cutTheConnection(device)
                 }
             }
+            findNavController().popBackStack()
         }
 
         bluetoothChatViewModel.messageList.observe(viewLifecycleOwner) { list ->

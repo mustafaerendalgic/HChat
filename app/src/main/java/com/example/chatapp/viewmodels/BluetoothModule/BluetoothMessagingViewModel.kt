@@ -33,7 +33,7 @@ class BluetoothMessagingViewModel @Inject constructor(
     private val _appName = "Bchat"
 
     private val _devicesConnected = MutableLiveData<MutableList<BluetoothDevice?>>(mutableListOf())
-    val devicesToChat: LiveData<MutableList<BluetoothDevice?>> = _devicesConnected
+    val devicesConnected: LiveData<MutableList<BluetoothDevice?>> = _devicesConnected
     
     private val _chatDevices = MutableLiveData<MutableList<BluetoothDevice>?>()
     val chatDevices: MutableLiveData<MutableList<BluetoothDevice>?> = _chatDevices
@@ -64,6 +64,14 @@ class BluetoothMessagingViewModel @Inject constructor(
                 _outputStream.putIfAbsent(remoteDevice.name.toString(), socket.outputStream)
             }
             _devicesConnected.postValue(currentDeviceList)
+            val remoteDevice = socket.remoteDevice
+            val chatDevices = _chatDevices.value ?: mutableListOf()
+
+            if(!chatDevices.contains(remoteDevice)) {
+                chatDevices.add(remoteDevice)
+                _chatDevices.postValue(chatDevices)
+            }
+
         }
         catch (e: IOException){
             Log.d("network_check", "something went wrong when adding device to the memory: ${e}")
@@ -73,23 +81,28 @@ class BluetoothMessagingViewModel @Inject constructor(
     @SuppressLint("MissingPermission")
     fun removeDeviceAndSocketFromMemory(socket: BluetoothSocket){
         try {
+
             val currentSocketList = _socketList.value ?: mutableListOf()
             if(currentSocketList.contains(socket)){
+                Log.d("network_check", "removeDevice - socket of this device is being removed: ${socket.remoteDevice}")
                 currentSocketList.remove(socket)
+                Log.d("network_check", "removeDevice - updated socket list: ${currentSocketList}")
                 _socketList.postValue(currentSocketList)
             }
+
             val currentDeviceList = _devicesConnected.value?.toMutableList() ?: mutableListOf()
-            for (socket in currentSocketList) {
-                val remoteDevice = socket.remoteDevice
-                if(currentDeviceList.contains(remoteDevice))
-                    currentDeviceList.remove(remoteDevice)
-                _outputStream.remove(remoteDevice.name.toString(), socket.outputStream)
-            }
+            val remoteDevice = socket.remoteDevice
+            currentDeviceList.remove(remoteDevice)
             _devicesConnected.postValue(currentDeviceList)
-            val chatDevices = _chatDevices.value ?: emptyList()
-            if(!chatDevices.isEmpty()){
-                if(chatDevices.contains(socket.remoteDevice))
-                    _chatDevices.postValue(null)
+            _outputStream.remove(remoteDevice.name.toString(), socket.outputStream)
+
+            _devicesConnected.postValue(currentDeviceList)
+            val chatDevices = _chatDevices.value ?: mutableListOf()
+            if(chatDevices.isNotEmpty()){
+                if(chatDevices.contains(remoteDevice)) {
+                    chatDevices.remove(remoteDevice)
+                    _chatDevices.postValue(chatDevices)
+                }
             }
             socket.close()
         }
@@ -116,7 +129,7 @@ class BluetoothMessagingViewModel @Inject constructor(
                         Log.d("network_check", "a device connected")
                         addDeviceAndSocketToMemory(socket)
                         if(!isManaging){
-                            manageConnectedSocket()
+                            manageConnectedSocketAsServer()
                             isManaging = true
                         }
                     }
@@ -129,7 +142,7 @@ class BluetoothMessagingViewModel @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    private fun manageConnectedSocket(){
+    private fun manageConnectedSocketAsServer(){
         Thread{
             val buffer = ByteArray(1024)
             var bytes: Int
@@ -143,12 +156,47 @@ class BluetoothMessagingViewModel @Inject constructor(
                             bytes = inputStream.read(buffer)
                             val incomingMessage = String(buffer, 0, bytes)
                             val remoteDevice = socket.remoteDevice
-                            val otherDevicesInTheChat = _chatDevices.value?.filter { device -> device.address != remoteDevice.address } ?: emptyList()
-                            forwardTheMessageToTheOtherDevices(incomingMessage, otherDevicesInTheChat)
                             val item = BluetoothMessage(1, remoteDevice.address, incomingMessage, System.currentTimeMillis().toString(), remoteDevice.name)
                             val currentList = _messageList.value?.toMutableList() ?: mutableListOf()
                             currentList.add(item)
                             _messageList.postValue(currentList)
+                            val currentDevicesInTheChat = _chatDevices.value?.toList() ?: emptyList()
+                            val otherDevicesInTheChat = currentDevicesInTheChat.filter { device -> device.address != remoteDevice.address }
+                            if(otherDevicesInTheChat.isNotEmpty())
+                                forwardTheMessageToTheOtherDevices(incomingMessage, otherDevicesInTheChat)
+
+                        } catch (e: IOException) {
+                            Log.d("chat_check", "Connection lost: ${e.message}")
+                            removeDeviceAndSocketFromMemory(socket)
+                            updateIsConnected(false)
+                            break
+                        }
+                    }
+                }
+            }
+        }.start()
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun manageConnectedSocketAsClient(){
+        Thread{
+            val buffer = ByteArray(1024)
+            var bytes: Int
+            while(true){
+                val sockets = _socketList.value?.toList() ?: emptyList()
+                if(sockets.isNotEmpty()) {
+                    updateIsConnected(true)
+                    for (socket in sockets) {
+                        try {
+                            val inputStream = socket.inputStream
+                            bytes = inputStream.read(buffer)
+                            val incomingMessage = String(buffer, 0, bytes)
+                            val remoteDevice = socket.remoteDevice
+                            val item = BluetoothMessage(1, remoteDevice.address, incomingMessage, System.currentTimeMillis().toString(), remoteDevice.name)
+                            val currentList = _messageList.value?.toMutableList() ?: mutableListOf()
+                            currentList.add(item)
+                            _messageList.postValue(currentList)
+
                         } catch (e: IOException) {
                             Log.d("chat_check", "Connection lost: ${e.message}")
                             removeDeviceAndSocketFromMemory(socket)
@@ -173,7 +221,7 @@ class BluetoothMessagingViewModel @Inject constructor(
                 Log.d("network_check", "attempting to connnect: ${device.name}")
                 Log.d("network_check", "connection is successful: ${device.name}")
                 updateIsConnected(true)
-                manageConnectedSocket()
+                manageConnectedSocketAsClient()
             }
             catch (e: IOException){
                 Log.d("network_check", "client socket error: ${e.message}")
@@ -224,8 +272,9 @@ class BluetoothMessagingViewModel @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    fun forwardTheMessageToTheOtherDevices(message: String, otherDevices: List<BluetoothDevice>){
+    private fun forwardTheMessageToTheOtherDevices(message: String, otherDevices: List<BluetoothDevice>){
         if(otherDevices.isNotEmpty()){
+            Log.d("network_check", "other devices exist")
             try {
                 for (otherDevice in otherDevices){
                     val bytes = message.toByteArray()
@@ -242,19 +291,31 @@ class BluetoothMessagingViewModel @Inject constructor(
                 Log.d("network_check", "something went wrong when forwarding: $e")
             }
         }
+        else
+            Log.d("network_check", "other devices do not exist")
     }
 
     @SuppressLint("MissingPermission")
     fun cutTheConnection(device: BluetoothDevice){
         val currentList = _socketList.value?.toMutableList() ?: mutableListOf()
         for (socket in currentList){
-            if(device.name.toString() == socket.remoteDevice.name.toString())
+            if(device.address == socket.remoteDevice.address) {
+                Log.d("network_check", "cutTheConnection - socket found, removing device")
                 removeDeviceAndSocketFromMemory(socket)
+            }
+            else
+                Log.d("network_check", "cutTheConnection - socket did not found to remove")
         }
     }
 
-    fun updateChatDevices(device: List<BluetoothDevice>){
-        _chatDevices.postValue(device.toMutableList())
+    fun updateChatDevices(devices: List<BluetoothDevice>){
+        val currentList = _chatDevices.value?.toMutableList() ?: mutableListOf()
+        for (device in devices){
+            if(!currentList.contains(device)){
+                currentList.add(device)
+            }
+        }
+        _chatDevices.postValue(currentList)
     }
 
     fun updateIsConnected(b: Boolean){

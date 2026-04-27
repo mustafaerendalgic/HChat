@@ -18,5 +18,5 @@ data class BluetoothDeviceListItem(
     val howManyUnseen: Int,
     val profilePicture: Uri? = null,
     val bluetoothClass: BluetoothClass,
-    val isConnected: Boolean = false
+    var isConnected: Boolean = false
 )
