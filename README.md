@@ -1,4 +1,4 @@
-# 📱 ChatApp — Hybrid Android Messaging Platform
+# 📱 ChatApp — Android Messaging Platform
 
 ![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
@@ -8,7 +8,7 @@
 
 > **Graduation Thesis Project** — Çukurova University, Department of Computer Engineering
 
-**ChatApp** is a sophisticated Android communication platform engineered to work seamlessly in both connected and disconnected environments. It combines cloud-based Firebase messaging with low-level Bluetooth RFCOMM peer-to-peer communication, making it resilient in scenarios where internet infrastructure is compromised — such as natural disasters, remote industrial areas, or off-grid deployments.
+**ChatApp** is an Android messaging application built around two fully independent communication modules — **Firebase** for internet-based real-time chat and **Bluetooth Classic RFCOMM** for offline peer-to-peer communication. The user selects a module from the main menu; each has its own data layer, ViewModels, and UI flow with no shared state between them.
 
 ---
 
@@ -35,26 +35,26 @@
 
 ## 📋 Project Overview
 
-The core objective of this thesis is to engineer a resilient messaging platform that seamlessly transitions between two communication modes:
+ChatApp provides two independent messaging modules, each designed for a different connectivity context:
 
-| Mode | Technology | Requirement |
+| Module | Technology | Requirement |
 |---|---|---|
-| **Online** | Firebase Realtime Database | Active internet connection |
-| **Offline P2P** | Bluetooth RFCOMM | No internet needed — device proximity only |
+| **Firebase Module** | Firebase Realtime Database + Auth | Active internet connection |
+| **Bluetooth Module** | Bluetooth Classic RFCOMM | No internet needed — device proximity only |
 
-By leveraging **Bluetooth RFCOMM** (Radio Frequency Communication), ChatApp establishes stable, high-throughput serial port emulations for real-time text exchange without requiring any internet connectivity. This hybrid model ensures continuous communication regardless of infrastructure availability.
+The modules are selected from a main menu and operate entirely independently — different screens, different data sources, different ViewModels.
 
 ---
 
 ## 📸 Screenshots
 
-### Online Mode
+### Firebase Module
 | Login Screen | Chat List | Chat Interface |
 | :---: | :---: | :---: |
 | <img src="https://github.com/user-attachments/assets/215fee3a-0a90-48b6-ac1e-12c96458c5ed" width="200" /> | <img src="https://github.com/user-attachments/assets/3cc7e437-cdd6-4d76-bf71-c2b242315333" width="200" /> | <img src="https://github.com/user-attachments/assets/17fa258b-aa87-44a9-8c4e-227ece0d30ff" width="200" /> |
 
-### Bluetooth (Offline P2P) Mode
-| Bluetooth Scan | Bluetooth Chat |
+### Bluetooth Module
+| Device Scan | Chat Interface |
 | :---: | :---: |
 | <img src="https://github.com/user-attachments/assets/7a2bc9b2-2883-413b-99c9-7d5661e9b0e2" width="200" /> | <img src="https://github.com/user-attachments/assets/8f28c0ba-00ec-49f3-b4ed-262eccfe32d5" width="200" /> |
 
@@ -62,15 +62,15 @@ By leveraging **Bluetooth RFCOMM** (Radio Frequency Communication), ChatApp esta
 
 ## ✨ Key Technical Features
 
-- **🔀 Hybrid Communication Architecture** — Integrates Firebase Realtime Database for online messaging and low-level Bluetooth Socket Programming for fully offline P2P sessions. The app automatically handles the context of each connection type.
+- **🔀 Two Independent Communication Modules** — Firebase module handles cloud-based real-time messaging; Bluetooth module handles fully offline P2P sessions via RFCOMM sockets. Each module has its own architecture with no shared state.
 
-- **📡 RFCOMM Data Streaming** — Implements asynchronous multi-threading to manage device discovery, connection handshakes, and bidirectional data streams without degrading UI responsiveness.
+- **📡 RFCOMM Data Streaming** — Implements asynchronous multi-threading (AcceptThread / ConnectThread / ConnectedThread) to manage device discovery, connection handshakes, and bidirectional data streams without blocking the UI.
 
-- **🔒 Modern Security Compliance** — Includes a comprehensive Permission Management Framework specifically tailored for **Android 12+ (API 31)** security standards for hardware-level Bluetooth interactions (`BLUETOOTH_SCAN`, `BLUETOOTH_CONNECT`, `BLUETOOTH_ADVERTISE`).
+- **🔒 Modern Permission Compliance** — Includes a runtime Permission Management Framework tailored for **Android 12+ (API 31)** Bluetooth permission standards (`BLUETOOTH_SCAN`, `BLUETOOTH_CONNECT`, `BLUETOOTH_ADVERTISE`), with graceful fallback for legacy APIs (pre-API 31).
 
-- **⚡ Reactive UI Engine** — Built using **MVVM** architecture combined with **LiveData** and **ListAdapter** for memory-efficient, lifecycle-aware data synchronization.
+- **⚡ Reactive UI** — Built with **MVVM** architecture combined with **LiveData** and **ListAdapter** for memory-efficient, lifecycle-aware data synchronization.
 
-- **💉 Dependency Injection via Hilt** — All components are wired through Hilt (Dagger), enabling scalable, testable, and maintainable code architecture.
+- **💉 Dependency Injection via Hilt** — All components are wired through Hilt (Dagger), enabling scalable and maintainable code architecture.
 
 - **🧭 Single-Activity Navigation** — Leverages the Android Navigation Component for centralized, type-safe fragment management with a clean back stack.
 
@@ -78,7 +78,7 @@ By leveraging **Bluetooth RFCOMM** (Radio Frequency Communication), ChatApp esta
 
 ## 🏛 Architecture
 
-ChatApp follows the **MVVM (Model-View-ViewModel)** architectural pattern with a clean separation of concerns:
+ChatApp follows the **MVVM** architectural pattern with a clean separation of concerns. The two modules share the same ViewModel layer structure but have completely separate repositories and data flows:
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -111,8 +111,8 @@ ChatApp follows the **MVVM (Model-View-ViewModel)** architectural pattern with a
 | **Min SDK** | Android 8.0 Oreo | API 26 |
 | **Target SDK** | Android 14 | API 34 |
 | **Build System** | Gradle (KTS) + KSP | KSP 2.3.1 |
-| **Backend (Online)** | Firebase Realtime Database + Auth | google-services 4.4.4 |
-| **Backend (Offline)** | Bluetooth Classic — RFCOMM / SPP | — |
+| **Firebase Module** | Firebase Realtime Database + Auth | google-services 4.4.4 |
+| **Bluetooth Module** | Bluetooth Classic — RFCOMM / SPP | — |
 | **Architecture** | MVVM + LiveData + Repository Pattern | — |
 | **Dependency Injection** | Hilt (Dagger) | 2.56 |
 | **Navigation** | Android Navigation Component + Safe Args | 2.7.7 |
@@ -261,23 +261,21 @@ The app requests the following permissions, managed through a runtime permission
 | `BLUETOOTH_CONNECT` | Connect to paired/discovered devices | API 31+ |
 | `BLUETOOTH_ADVERTISE` | Make device discoverable to peers | API 31+ |
 
-> The app also declares `android.hardware.bluetooth_le` as a **required hardware feature**, meaning it will only be installable on devices with BLE support.
-
-The app includes a comprehensive **Permission Management Framework** that gracefully handles both legacy (pre-API 31) and modern (API 31+) permission models.
+The app includes a Permission Management Framework that gracefully handles both legacy (pre-API 31) and modern (API 31+) Bluetooth permission models.
 
 ---
 
 ## ⚙️ How It Works
 
-### Online Mode (Firebase)
+### Firebase Module (Online)
 1. User authenticates via Firebase Authentication.
 2. Messages are written to Firebase Realtime Database.
 3. All connected clients receive updates in real-time via Firebase listeners.
 
-### Offline Mode (Bluetooth P2P)
+### Bluetooth Module (Offline P2P)
 1. One device acts as a **server** — starts an `AcceptThread` listening on an RFCOMM socket.
 2. The other device acts as a **client** — discovers nearby devices and connects via `ConnectThread`.
-3. Once the connection is established, a **`ConnectedThread`** manages the bidirectional data stream.
+3. Once connected, a `ConnectedThread` manages the bidirectional data stream.
 4. All operations run on background threads to keep the UI responsive.
 
 ```
@@ -289,6 +287,8 @@ Device A (Server)              Device B (Client)
       │                               │
       │◀═══ ConnectedThread (R/W) ════│
 ```
+
+---
 
 ## 👤 Author
 
