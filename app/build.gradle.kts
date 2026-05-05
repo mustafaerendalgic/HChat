@@ -81,5 +81,9 @@ dependencies {
 
     implementation("androidx.datastore:datastore-preferences:1.2.1")
 
+    val room_version = "2.8.4"
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+
 }
 apply(plugin = "com.google.gms.google-services")

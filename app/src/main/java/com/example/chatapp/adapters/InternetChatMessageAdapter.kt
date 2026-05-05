@@ -13,9 +13,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.chatapp.R
-import com.example.chatapp.data.entity.ChatMessage
-import com.example.chatapp.util.formatDate
-import com.example.chatapp.viewmodels.InternetModule.InternetChatPageViewModel
+import com.example.chatapp.internet.entity.ChatMessage
+import com.example.chatapp.internet.util.formatDate
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.firestore.FirebaseFirestore
 

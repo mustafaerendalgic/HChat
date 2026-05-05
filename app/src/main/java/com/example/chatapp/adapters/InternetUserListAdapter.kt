@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.chatapp.R
-import com.example.chatapp.data.entity.UserListItem
-import com.example.chatapp.viewmodels.InternetModule.InternetChatPageViewModel
+import com.example.chatapp.internet.entity.UserListItem
+import com.example.chatapp.internet.viewmodels.InternetChatPageViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 class seenUserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
