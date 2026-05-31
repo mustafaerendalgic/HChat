@@ -1,4 +1,4 @@
-package com.example.chatapp.internet.fragments
+package com.example.chatapp
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.chatapp.R
 import com.example.chatapp.databinding.FragmentMainMenuBinding
 
 class MainMenu : Fragment() {
@@ -22,6 +21,7 @@ class MainMenu : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         binding = FragmentMainMenuBinding.inflate(inflater)
 
         binding.internetModuleNavigationButton.setOnClickListener {
@@ -33,7 +33,7 @@ class MainMenu : Fragment() {
         }
 
         binding.networkModuleNavigationButton.setOnClickListener {
-            findNavController().navigate(R.id.main_to_b)
+            findNavController().navigate(R.id.main_to_network)
         }
 
         return binding.root

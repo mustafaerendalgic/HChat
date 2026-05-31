@@ -10,7 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatapp.R
-import com.example.chatapp.adapters.UserListAdapter
+import com.example.chatapp.internet.adapters.UserListAdapter
 import com.example.chatapp.databinding.IFragmentMainPageBinding
 import com.example.chatapp.internet.viewmodels.InternetChatPageViewModel
 import com.example.chatapp.internet.viewmodels.InternetMainPageViewModel

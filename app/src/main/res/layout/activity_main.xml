@@ -8,7 +8,6 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -21,7 +20,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/navres" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

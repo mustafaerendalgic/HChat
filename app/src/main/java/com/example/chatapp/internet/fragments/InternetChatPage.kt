@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.chatapp.R
-import com.example.chatapp.adapters.ChatMessageAdapter
+import com.example.chatapp.internet.adapters.ChatMessageAdapter
 import com.example.chatapp.databinding.IFragmentChatPageBinding
 import com.example.chatapp.internet.viewmodels.InternetChatPageViewModel
 import com.google.firebase.auth.FirebaseAuth

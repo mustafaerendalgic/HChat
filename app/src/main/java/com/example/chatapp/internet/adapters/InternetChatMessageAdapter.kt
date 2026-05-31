@@ -1,4 +1,4 @@
-package com.example.chatapp.adapters
+package com.example.chatapp.internet.adapters
 
 import android.util.Log
 import android.view.LayoutInflater

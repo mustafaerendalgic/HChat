@@ -1,4 +1,4 @@
-package com.example.chatapp.adapters
+package com.example.chatapp.internet.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -98,13 +98,17 @@ class UserListAdapter(private val internetChatPageViewModel: InternetChatPageVie
                     holder.lastMessage.text =  "Say hi to ${item.nick}!"
                 }
                 else{
-                    holder.messageStatus.visibility = View.VISIBLE
-                    holder.lastMessageDate.visibility = View.VISIBLE
+                    holder.messageStatus.visibility = View.INVISIBLE
+                    holder.lastMessageDate.visibility = View.INVISIBLE
                     if(item.lastMessageBy == uid){
                         holder.lastMessage.text = "You: " + item.lastMessage
+                        holder.lastMessageDate.visibility = View.VISIBLE
+                        holder.messageStatus.visibility = View.VISIBLE
                     }
                     else{
                         holder.lastMessage.text = item.lastMessage
+                        holder.messageStatus.visibility = View.GONE
+                        holder.lastMessageDate.visibility = View.VISIBLE
                     }
                     holder.lastMessageDate.text = item.lastMessageDate
                 }

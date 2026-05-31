@@ -17,4 +17,5 @@
     <string name="bluetooth_module">Bluetooth Üzerinden Mesajlaş</string>
     <string name="network_module">Ağı Tara</string>
     <string name="what_is_your_name">İsmin nedir?</string>
+    <string name="scan_title">Sonar</string>
 </resources>

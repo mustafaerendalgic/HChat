@@ -59,7 +59,7 @@
     </fragment>
     <fragment
         android:id="@+id/mainMenu"
-        android:name="com.example.chatapp.internet.fragments.MainMenu"
+        android:name="com.example.chatapp.MainMenu"
         android:label="fragment_main_menu"
         tools:layout="@layout/fragment_main_menu" >
         <action
@@ -68,6 +68,9 @@
         <action
             android:id="@+id/main_to_b"
             app:destination="@id/bluetoothMainPage" />
+        <action
+            android:id="@+id/main_to_network"
+            app:destination="@id/scanNetworkFragment" />
     </fragment>
     <fragment
         android:id="@+id/bluetoothMainPage"
@@ -83,4 +86,9 @@
         android:name="com.example.chatapp.bluetooth.fragments.BluetoothChatPage"
         android:label="b_fragment_chat_page"
         tools:layout="@layout/b_fragment_chat_page" />
+    <fragment
+        android:id="@+id/scanNetworkFragment"
+        android:name="com.example.chatapp.scan.fragment.ScanNetworkFragment"
+        android:label="fragment_scan_network"
+        tools:layout="@layout/fragment_scan_network" />
 </navigation>
