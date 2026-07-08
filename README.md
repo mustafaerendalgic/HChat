@@ -51,22 +51,18 @@ The app launches to a **MainMenu** where the user picks a communication mode. Ea
 ---
 
 ## 📸 Screenshots
+
 ### Firebase Module
 
 |                                                   Login                                                  |                                                 User List                                                |                                                   Chat                                                   |
-
 | :------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------: |
-
 | <img src="https://github.com/user-attachments/assets/215fee3a-0a90-48b6-ac1e-12c96458c5ed" width="200"/> | <img src="https://github.com/user-attachments/assets/3cc7e437-cdd6-4d76-bf71-c2b242315333" width="200"/> | <img src="https://github.com/user-attachments/assets/17fa258b-aa87-44a9-8c4e-227ece0d30ff" width="200"/> |
 
 ### Bluetooth Module
 
 |                                                Device Scan                                               |                                                   Chat                                                   |
-
 | :------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------: |
-
 | <img src="https://github.com/user-attachments/assets/2c5c84dd-c14b-480e-be4b-a4be35b1d70a" width="200"/> | <img src="https://github.com/user-attachments/assets/e3d4e5d6-17fc-4aa2-b416-1f31f1751569" width="200"/> |
-
 
 ---
 
