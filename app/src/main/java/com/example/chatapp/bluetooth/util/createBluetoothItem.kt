@@ -5,7 +5,7 @@ import android.bluetooth.BluetoothDevice
 import com.example.chatapp.bluetooth.data.entity.BluetoothDeviceListItem
 
 @SuppressLint("MissingPermission")
-fun createBluetoothItem(device: BluetoothDevice, nickName: String): BluetoothDeviceListItem{
-    val item = BluetoothDeviceListItem(device.name ?: "undefined", device.address, device.type, device.uuids, "", "", 1, 0, null, device.bluetoothClass, false, null,  nickName)
+fun createBluetoothItem(device: BluetoothDevice, nickName: String, psm: Int, role: Int, uuid: String): BluetoothDeviceListItem{
+    val item = BluetoothDeviceListItem(device, nickName, null, "", 1, 0, null, false, role, psm, uuid)
     return item
 }

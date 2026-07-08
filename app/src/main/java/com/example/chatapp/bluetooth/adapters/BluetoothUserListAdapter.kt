@@ -1,11 +1,13 @@
 package com.example.chatapp.bluetooth.adapters
 
+import android.Manifest
 import android.bluetooth.BluetoothClass
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chatapp.R
 import com.example.chatapp.bluetooth.data.entity.BluetoothDeviceListItem
+import com.example.chatapp.bluetooth.util.getTheRoleName
 
 class bltSeenUserListViewHolder(item: View) : RecyclerView.ViewHolder(item){
     val profilePicture: ImageView
@@ -78,6 +81,7 @@ class BluetoothUserListAdapter(private val onDeviceClick: (device: BluetoothDevi
         }
     }
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int
@@ -87,7 +91,7 @@ class BluetoothUserListAdapter(private val onDeviceClick: (device: BluetoothDevi
             holder as bltUnseenUserListViewHolder
             holder.lastMessage.text = item.lastMessage
             holder.lastMessageDate.text = item.lastMessageDate
-            holder.nickname.text = item.deviceName
+            holder.nickname.text = "${item.device.name} (${item.nick}) - (${getTheRoleName(item.role)})"
             holder.howManyText.text = item.howManyUnseen.toString()
             if(item.isConnected)
                 holder.nickname.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.primary))
@@ -108,7 +112,7 @@ class BluetoothUserListAdapter(private val onDeviceClick: (device: BluetoothDevi
                 holder.lastMessageDate.visibility = View.VISIBLE
                 holder.lastMessageDate.text = item.lastMessageDate
             }
-            holder.nickname.text = item.deviceName
+            holder.nickname.text = "${item.device.name} (${item.nick}) - (${getTheRoleName(item.role)})"
 
             if(item.isConnected){
                 holder.nickname.setTextColor(holder.itemView.context.getColor(R.color.b_primary))
@@ -124,7 +128,7 @@ class BluetoothUserListAdapter(private val onDeviceClick: (device: BluetoothDevi
 
             if(item.profilePicture != null)
                 holder.profilePicture.setImageURI(item.profilePicture)
-            if(item.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.COMPUTER){
+            if(item.device.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.COMPUTER){
                 holder.deviceIcon.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context, R.drawable.baseline_computer_24))
             }
             holder.itemView.setOnClickListener {
@@ -136,11 +140,12 @@ class BluetoothUserListAdapter(private val onDeviceClick: (device: BluetoothDevi
 }
 
 class BluetoothDeviceListDiffCallback() : DiffUtil.ItemCallback<BluetoothDeviceListItem>(){
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     override fun areItemsTheSame(
         oldItem: BluetoothDeviceListItem,
         newItem: BluetoothDeviceListItem
     ): Boolean {
-        return if (oldItem.macAddress == newItem.macAddress)
+        return if (oldItem.device.name == newItem.device.name && oldItem.deviceUUID == newItem.deviceUUID)
             true
         else
             false

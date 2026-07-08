@@ -15,5 +15,7 @@ data class BluetoothConnection(
     val inputStream: InputStream,
     val outputStream: OutputStream,
     val device: BluetoothDevice,
-    val scope: CoroutineScope
+    val scope: CoroutineScope,
+    val psm: Int,
+    val uuid: String
 )

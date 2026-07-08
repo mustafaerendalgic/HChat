@@ -12,6 +12,11 @@ import com.example.chatapp.bluetooth.data.repo.client.ClientHandlerImp
 import com.example.chatapp.bluetooth.data.repo.general.GeneralHandlerImp
 import com.example.chatapp.bluetooth.room.BluetoothDao
 import com.example.chatapp.bluetooth.room.RoomDatabaseForBluetooth
+import com.example.chatapp.bluetooth.data.local.SPDataHandlers
+import com.example.chatapp.bluetooth.data.repo.BleConnectionManager
+import com.example.chatapp.bluetooth.data.repo.BleDiscoveryManager
+import com.example.chatapp.bluetooth.data.repo.BluetoothMessageParser
+import com.example.chatapp.bluetooth.data.repo.general.SPHandler
 import com.example.chatapp.scan.data.repo.NetworkScanRepo
 import dagger.Module
 import dagger.Provides
@@ -51,8 +56,8 @@ object BluetoothModule{
 
     @Provides
     @Singleton
-    fun getRepo(dao: BluetoothDao, adapter: BluetoothAdapter): BluetoothRepo{
-        return BluetoothRepo(dao, adapter)
+    fun getRepo(dao: BluetoothDao, adapter: BluetoothAdapter, spHandler: SPHandler, bleMessageParser: BluetoothMessageParser, bleConnectionManager: BleConnectionManager, bleDiscoveryManager: BleDiscoveryManager): BluetoothRepo{
+        return BluetoothRepo(dao, adapter, spHandler, bleMessageParser, bleConnectionManager, bleDiscoveryManager)
     }
 
     @Provides
@@ -77,6 +82,18 @@ object BluetoothModule{
     @Singleton
     fun getWifiManager(@ApplicationContext context: Context): WifiManager{
         return context.getSystemService(WIFI_SERVICE) as WifiManager
+    }
+
+    @Provides
+    @Singleton
+    fun getSPHandler(@ApplicationContext context: Context): SPHandler{
+        return SPDataHandlers(context)
+    }
+
+    @Provides
+    @Singleton
+    fun getBleMessageParser(): BluetoothMessageParser{
+        return BluetoothMessageParser()
     }
 
 }

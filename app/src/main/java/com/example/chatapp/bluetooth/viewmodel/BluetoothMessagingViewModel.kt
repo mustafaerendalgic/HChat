@@ -4,14 +4,18 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.room.util.findAndInstantiateDatabaseImpl
 import com.example.chatapp.bluetooth.data.entity.BluetoothDeviceListItem
 import com.example.chatapp.bluetooth.data.entity.BluetoothMessage
+import com.example.chatapp.bluetooth.data.entity.DeviceRole
 import com.example.chatapp.bluetooth.data.repo.BluetoothRepo
 import com.example.chatapp.bluetooth.data.entity.ObjectConstants
 import com.example.chatapp.bluetooth.data.repo.client.ClientHandlerImp
@@ -39,8 +43,8 @@ class BluetoothMessagingViewModel @Inject constructor(
     private val clientHandler: ClientHandlerImp
 ) : ViewModel() {
 
-    private val _devicesConnected = MutableStateFlow<MutableList<BluetoothDevice?>>(mutableListOf())
-    val devicesConnected: StateFlow<MutableList<BluetoothDevice?>> = _devicesConnected
+    private val _devicesConnected = MutableStateFlow<MutableList<BluetoothDeviceListItem>>(mutableListOf())
+    val devicesConnected: StateFlow<MutableList<BluetoothDeviceListItem>> = _devicesConnected
 
     private var _messageList = MutableStateFlow<List<BluetoothMessage>>(mutableListOf())
     val messageList: MutableStateFlow<List<BluetoothMessage>> = _messageList
@@ -57,9 +61,17 @@ class BluetoothMessagingViewModel @Inject constructor(
     private val _isScanning = MutableStateFlow<Boolean>(false)
     val isScanning: StateFlow<Boolean> = _isScanning
 
-    val errors = MutableStateFlow<String>("")
+    private val _deviceRole = MutableStateFlow<Int>(DeviceRole.IDLE)
+    val deviceRole: StateFlow<Int> = _deviceRole
+
+    val errors = MutableSharedFlow<String>()
 
     init {
+        viewModelScope.launch {
+            repo.errors.collect { error ->
+                errors.emit(error.message)
+            }
+        }
         viewModelScope.launch {
             repo.isScanning.collect { isScanningRepo ->
                 _isScanning.value = isScanningRepo
@@ -81,19 +93,23 @@ class BluetoothMessagingViewModel @Inject constructor(
         }
         viewModelScope.launch {
             repo.chatDevice.collect { device ->
-                Log.d("scan_assessment", "chatdevice updating in vm: ${_chatDevice.value}")
                 _chatDevice.value = device
             }
         }
         viewModelScope.launch {
-            Log.d("scan_assessment", "observing viewmodel scanresult")
             repo.scanResults.collect { devices ->
-                Log.d("scan_assessment", "observing viewmodel scanresult: $devices")
                 _scanResults.value = devices
+            }
+        }
+        viewModelScope.launch {
+            repo.deviceRole.collect { role ->
+                _deviceRole.value = role
             }
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
+    @SuppressLint("MissingPermission")
     fun onEvent(event: BluetoothEvent){
         when(event){
             is GeneralBluetoothEvent -> {
@@ -108,11 +124,6 @@ class BluetoothMessagingViewModel @Inject constructor(
             }
         }
     }
-
-    fun getRemoteDevice(mac: String): BluetoothDevice?{
-        return repo.getRemoteDevice(mac)
-    }
-
 
     override fun onCleared() {
         super.onCleared()
