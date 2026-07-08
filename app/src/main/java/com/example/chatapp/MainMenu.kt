@@ -32,10 +32,6 @@ class MainMenu : Fragment() {
             findNavController().navigate(R.id.main_to_b)
         }
 
-        binding.networkModuleNavigationButton.setOnClickListener {
-            findNavController().navigate(R.id.main_to_network)
-        }
-
         return binding.root
     }
 
