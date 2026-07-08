@@ -146,8 +146,6 @@ sealed interface ClientBluetoothEvent  : BluetoothEvent  // connectToDevice
 
 - **Seen Status per Message** — Each `ChatMessage` in the Realtime Database has a `seen` boolean that is updated via `updateSeenStatus()` once the recipient opens the chat.
 
-- **Glide for Profile Pictures** — User avatars are loaded from Firebase Storage URLs using Glide 5.
-
 - **Lottie Animations** — Loading and empty-state animations are handled by the Lottie library.
 
 ---
