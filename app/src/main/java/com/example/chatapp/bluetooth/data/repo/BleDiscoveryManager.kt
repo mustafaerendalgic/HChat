@@ -61,7 +61,7 @@ class BleDiscoveryManager @Inject constructor(private val blManager: BluetoothMa
                 val nickBytes = combinedBytes.copyOfRange(21, combinedBytes.size)
                 val psmPortBytes = ByteBuffer.wrap(combinedBytes, 0, 4).int
                 val roleBytes = combinedBytes[4].toInt()
-                val uuid = byteArrayToUuidString(uuidBytes).trim()
+                val uuid = byteArrayToUuidString(uuidBytes).lowercase().trim()
                 val nick = String(nickBytes, Charsets.UTF_8)
                 val psmPort = psmPortBytes.toInt()
                 Log.d("psm_assessment", "psm ${nick}: ${psmPort}")

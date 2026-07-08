@@ -89,7 +89,6 @@ class BluetoothChatPage : Fragment() {
 
         binding.endConnectionButton.setOnClickListener {
             bluetoothChatViewModel.onEvent(GeneralBluetoothEvent.EndTheConnection(_chatDevice))
-            findNavController().popBackStack()
         }
 
         binding.bSendMessageButton.setOnClickListener {

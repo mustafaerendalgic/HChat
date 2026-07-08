@@ -124,7 +124,7 @@ class BluetoothRepo @Inject constructor(private val dao: BluetoothDao,
         if(shouldScan){
             bleDiscoveryManager.startScanning { device ->
                 val currentList = _scanResults.value.toMutableList()
-                val index = currentList.indexOfFirst { it.deviceUUID.lowercase() == device.deviceUUID.lowercase()}
+                val index = currentList.indexOfFirst { it.deviceUUID == device.deviceUUID}
                 if(index == -1) currentList.add(device)
                 else currentList[index] = device
                 _scanResults.value = currentList
@@ -158,7 +158,10 @@ class BluetoothRepo @Inject constructor(private val dao: BluetoothDao,
 
     suspend fun endConnection(device: BluetoothDeviceListItem?){
         if(device == null) return
-        val connection = _connectionList.value.find { it.uuid.lowercase() == device.deviceUUID } ?: return
+        val connection = _connectionList.value.find { it.uuid == device.deviceUUID } ?: run {
+            emitError("connection_assessment, uuid doesn't match")
+            return
+        }
         bleConnectionManager.endConnection(connection,  error = { message -> emitError(message) }) { connectionUuid ->
             removeDeviceFromMemory(connectionUuid)
         }
@@ -167,7 +170,7 @@ class BluetoothRepo @Inject constructor(private val dao: BluetoothDao,
     private suspend fun removeDeviceFromMemory(uuid: String){
         val connectionListTemp = _connectionList.value.toMutableList()
         val connectedDevicesTemp = _connectedDevices.value.toMutableList()
-        val device = connectedDevicesTemp.find { it.deviceUUID == uuid }  ?: run {emitError("attempted to remove but device is already absent in memory"); return}
+        val device = connectedDevicesTemp.find { it.deviceUUID == uuid}  ?: run {emitError("attempted to remove but device is already absent in memory"); return}
         connectionListTemp.removeIf { it.uuid == device.deviceUUID }
         connectedDevicesTemp.removeIf { it.deviceUUID == device.deviceUUID }
         _connectionList.value = connectionListTemp
@@ -182,7 +185,7 @@ class BluetoothRepo @Inject constructor(private val dao: BluetoothDao,
         val connectedDevicesTemp = _connectedDevices.value.toMutableList()
         val scanResults = _scanResults.value
         if(connectedDevicesTemp.none{it.deviceUUID == item.uuid}) {
-            val deviceListItem = scanResults.find { it.deviceUUID.toString().lowercase().trim() == item.uuid.toString().lowercase().trim() } ?: run {
+            val deviceListItem = scanResults.find { it.deviceUUID == item.uuid.toString() } ?: run {
                 emitError("selected device can't be recognized in scan results")
                 item.socket.close()
                 return
@@ -198,7 +201,9 @@ class BluetoothRepo @Inject constructor(private val dao: BluetoothDao,
         }
         _connectionList.value = connectionListTemp
         _connectedDevices.value = connectedDevicesTemp
-        bleConnectionManager.manageConnectedSocket(item, socketError = {emitError(it); removeDeviceFromMemory(item.uuid)}){ message ->
+        bleConnectionManager.manageConnectedSocket(item, socketError = {emitError(it); bleConnectionManager.endConnection(item,  error = { message -> emitError(message) }) { connectionUuid ->
+            removeDeviceFromMemory(connectionUuid)
+        }}){ message ->
             upsertMessage(message)
         }
     }
@@ -249,7 +254,7 @@ class BluetoothRepo @Inject constructor(private val dao: BluetoothDao,
         _scanResults.value = mutableListOf<BluetoothDeviceListItem>()
         val list = _connectedDevices.value
         list.forEach { connectedDevice ->
-            val connection = _connectionList.value.find { connection -> connectedDevice.deviceUUID.lowercase() == connection.uuid.lowercase()}
+            val connection = _connectionList.value.find { connection -> connectedDevice.deviceUUID == connection.uuid}
             if(connection != null) {
                 bleConnectionManager.endConnection(connection, error = {emitError(it)}) { uuid -> removeDeviceFromMemory(uuid) }
 

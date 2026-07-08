@@ -68,6 +68,9 @@ class BleConnectionManager @Inject constructor(private val bluetoothAdapter: Blu
                     val byteSize = connection.socket.inputStream.read(buffer)
                     val byteArray = buffer.copyOfRange(0, byteSize)
                     val messageID = bleMessageParser.getMessageID(byteArray)
+                    if (byteSize == -1) {
+                        throw IOException("connection closed by remote peer")
+                    }
                     var lastPacketList = assemblyMap.getOrPut(messageID) { mutableListOf() }
                     lastPacketList.add(byteArray)
                     Log.d("connection_assessment", "manageConnectedSocket: totalParts: ${byteArray[2]}")
@@ -80,12 +83,7 @@ class BleConnectionManager @Inject constructor(private val bluetoothAdapter: Blu
             }
             catch (e: Exception){
                 Log.d("connection_assessment", "manageConnectedSocket - Something went wrong when managing: ${e.message}, causedby: ${e.cause}")
-                connection.scope.cancel()
                 socketError(e.message ?: "undefined error")
-                /*removeDeviceFromMemory(connection.uuid)
-                if(_connectedDevices.value.isEmpty())
-                    setDeviceRole(ObjectConstants.IDLE_CODE)
-                emitError()*/
             }
         }
     }
