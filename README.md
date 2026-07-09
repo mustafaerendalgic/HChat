@@ -21,6 +21,7 @@ The project was developed as a graduation thesis at Çukurova University, Depart
 ## Contents
 
 - [Overview](#overview)
+- [Screenshots](#screenshots)
 - [Main Features](#main-features)
 - [Bluetooth Architecture](#bluetooth-architecture)
 - [Android Version Compatibility](#android-version-compatibility)
@@ -49,6 +50,32 @@ HChat opens with a main menu that allows the user to select one of two communica
 | Bluetooth chat | BLE advertising/scanning and L2CAP Connection-Oriented Channels | Room | No |
 
 Both features follow the same overall architectural approach while maintaining separate UI, state, and data-handling components.
+
+---
+
+## Screenshots
+
+### Main Menu
+
+<p align="center">
+  <img src="docs/screenshots/main-menu.png" width="260" alt="HChat main menu">
+</p>
+
+### Cloud Chat
+
+<p align="center">
+  <img src="docs/screenshots/cloud-users.png" width="240" alt="Cloud chat user list">
+  <img src="docs/screenshots/cloud-chat.png" width="240" alt="Cloud conversation screen">
+  <img src="docs/screenshots/profile.png" width="240" alt="User profile screen">
+</p>
+
+### Offline Bluetooth Chat
+
+<p align="center">
+  <img src="docs/screenshots/bluetooth-discovery.png" width="240" alt="Bluetooth peer discovery">
+  <img src="docs/screenshots/bluetooth-devices.png" width="240" alt="Connected Bluetooth devices">
+  <img src="docs/screenshots/bluetooth-chat.png" width="240" alt="Offline Bluetooth conversation">
+</p>
 
 ---
 
