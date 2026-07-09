@@ -53,29 +53,15 @@ Both features follow the same overall architectural approach while maintaining s
 
 ---
 
-## Screenshots
+📸 Screenshots
 
-### Main Menu
+Firebase Module
 
-<p align="center">
-  <img src="docs/screenshots/main-menu.png" width="260" alt="HChat main menu">
-</p>
+LoginUser ListChat<img src="https://github.com/user-attachments/assets/215fee3a-0a90-48b6-ac1e-12c96458c5ed" width="200"/><img src="https://github.com/user-attachments/assets/3cc7e437-cdd6-4d76-bf71-c2b242315333" width="200"/><img src="https://github.com/user-attachments/assets/17fa258b-aa87-44a9-8c4e-227ece0d30ff" width="200"/>
 
-### Cloud Chat
+Bluetooth Module
 
-<p align="center">
-  <img src="docs/screenshots/cloud-users.png" width="240" alt="Cloud chat user list">
-  <img src="docs/screenshots/cloud-chat.png" width="240" alt="Cloud conversation screen">
-  <img src="docs/screenshots/profile.png" width="240" alt="User profile screen">
-</p>
-
-### Offline Bluetooth Chat
-
-<p align="center">
-  <img src="docs/screenshots/bluetooth-discovery.png" width="240" alt="Bluetooth peer discovery">
-  <img src="docs/screenshots/bluetooth-devices.png" width="240" alt="Connected Bluetooth devices">
-  <img src="docs/screenshots/bluetooth-chat.png" width="240" alt="Offline Bluetooth conversation">
-</p>
+Device ScanChat<img src="https://github.com/user-attachments/assets/2c5c84dd-c14b-480e-be4b-a4be35b1d70a" width="200"/><img src="https://github.com/user-attachments/assets/e3d4e5d6-17fc-4aa2-b416-1f31f1751569" width="200"/>
 
 ---
 
